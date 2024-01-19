@@ -1,0 +1,8 @@
+/.idea/
+/mbs-sdk-parent.iml
+/sdk/mbs-sdk.iml
+/sdk/target/
+/target/
+/sdk/pom.xml.versionsBackup
+/pom.xml.versionsBackup
+/release.properties
