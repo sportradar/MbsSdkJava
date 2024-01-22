@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sportradar.mbs.sdk</groupId>
     <artifactId>mbs-sdk-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9</version>
     <name>MBS SDK</name>
     <description>MBS SDK is a client library that enables easier integration with the Sportradar MBS</description>
     <inceptionYear>2024</inceptionYear>
@@ -35,7 +34,8 @@
     <scm>
         <url>https://github.com/sportradar/MbsSdkJava</url>
         <connection>scm:git:git@github.com:sportradar/MbsSdkJava.git</connection>
-    </scm>
+      <tag>v0.9</tag>
+  </scm>
 
     <modules>
         <module>sdk</module>
