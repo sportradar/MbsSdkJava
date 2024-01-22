@@ -77,7 +77,7 @@
 
     <profiles>
         <profile>
-            <id>mbss.ossrh</id>
+            <id>mbs.ossrh</id>
             <build>
                 <plugins>
                     <plugin>
