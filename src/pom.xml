@@ -37,7 +37,6 @@
         <connection>scm:git:github.com:sportradar/MbsSdkJava.git</connection>
     </scm>
 
-
     <modules>
         <module>sdk</module>
     </modules>
