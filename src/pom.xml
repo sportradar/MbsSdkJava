@@ -5,7 +5,7 @@
     <groupId>com.sportradar.mbs.sdk</groupId>
     <artifactId>mbs-sdk-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9</version>
+    <version>0.9-SNAPSHOT</version>
     <name>MBS SDK</name>
     <inceptionYear>2024</inceptionYear>
     <url>http://sdk.sportradar.com/mts/java</url>
