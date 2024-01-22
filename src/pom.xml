@@ -32,7 +32,7 @@
     </developers>
     <scm>
         <url>https://github.com/sportradar/MbsSdkJava</url>
-        <connection>scm:git:ssh://git@github.com:sportradar/MbsSdkJava.git</connection>
+        <connection>scm:git:git@github.com:sportradar/MbsSdkJava.git</connection>
   </scm>
 
     <modules>
