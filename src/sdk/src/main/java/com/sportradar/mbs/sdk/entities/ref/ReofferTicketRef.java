@@ -78,6 +78,17 @@ public class ReofferTicketRef extends TicketRef {
         }
 
         /**
+         * Sets the ticket signature.
+         *
+         * @param value The ticket signature to set.
+         * @return The builder instance.
+         */
+        public Builder setTicketSignature(String value) {
+            this.instance.setTicketSignature(value);
+            return this;
+        }
+
+        /**
          * Sets the ticket ID.
          *
          * @param value The ticket ID to set.
