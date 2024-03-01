@@ -10,6 +10,10 @@ public class AltStakeTicketRef extends TicketRef {
     @JsonProperty("ticketId")
     private String ticketId;
 
+    @JsonProperty("ticketSignature")
+    private String ticketSignature;
+
+
     /**
      * Creates a new instance of the {@code AltStakeTicketRef.Builder} class.
      *
@@ -17,6 +21,24 @@ public class AltStakeTicketRef extends TicketRef {
      */
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    /**
+     * Gets the ticket signature.
+     *
+     * @return The ticket signature.
+     */
+    public String getTicketSignature() {
+        return this.ticketSignature;
+    }
+
+    /**
+     * Sets the ticket signature.
+     *
+     * @param value The ticket signature to set.
+     */
+    public void setTicketSignature(String value) {
+        this.ticketSignature = value;
     }
 
     /**
