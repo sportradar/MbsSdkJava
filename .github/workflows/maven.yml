@@ -31,14 +31,17 @@ jobs:
         mvn --version
         cd src
         mvn site
+        mvn javadoc:jar
     - name: push site to gh-pages
       run: |
           git config --global user.name 'Automated User'
           git config --global user.email 'example@sportradar.com'
           git checkout -B gh-pages
           mv src/target/site/apidocs .git/
+          mv src/sdk/target/*.jar .git/
           rm -rf *
           mv .git/apidocs/* .
+          mv .git/*.jar .
           git add .
           git commit -am "Automated github page generation"
           git push origin gh-pages -f
