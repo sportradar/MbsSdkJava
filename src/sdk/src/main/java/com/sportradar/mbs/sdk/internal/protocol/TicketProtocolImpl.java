@@ -21,36 +21,36 @@ class TicketProtocolImpl implements TicketProtocol {
 
     @Override
     public CompletableFuture<TicketAckResponse> sendTicketAckAsync(final TicketAckRequest request) {
-        return engine.execute("ticket-ack", request, TicketAckResponse.class);
+        return engine.execute("ticket-placement-ack", request, TicketAckResponse.class);
     }
 
     @Override
     public CompletableFuture<CancelResponse> sendCancelAsync(final CancelRequest request) {
-        return engine.execute("cancel", request, CancelResponse.class);
+        return engine.execute("ticket-cancel", request, CancelResponse.class);
     }
 
     @Override
     public CompletableFuture<CancelAckResponse> sendCancelAckAsync(final CancelAckRequest request) {
-        return engine.execute("cancel-ack", request, CancelAckResponse.class);
+        return engine.execute("ticket-cancel-ack", request, CancelAckResponse.class);
     }
 
     @Override
     public CompletableFuture<CashoutResponse> sendCashoutAsync(final CashoutRequest request) {
-        return engine.execute("cashout", request, CashoutResponse.class);
+        return engine.execute("ticket-cashout", request, CashoutResponse.class);
     }
 
     @Override
     public CompletableFuture<CashoutAckResponse> sendCashoutAckAsync(final CashoutAckRequest request) {
-        return engine.execute("cashout-ack", request, CashoutAckResponse.class);
+        return engine.execute("ticket-cashout-ack", request, CashoutAckResponse.class);
     }
 
     @Override
     public CompletableFuture<ExtSettlementResponse> sendExtSettlementAsync(final ExtSettlementRequest request) {
-        return engine.execute("ext-settlement", request, ExtSettlementResponse.class);
+        return engine.execute("ticket-ext-settlement", request, ExtSettlementResponse.class);
     }
 
     @Override
     public CompletableFuture<ExtSettlementAckResponse> sendExtSettlementAckAsync(final ExtSettlementAckRequest request) {
-        return engine.execute("ext-settlement-ack", request, ExtSettlementAckResponse.class);
+        return engine.execute("ticket-ext-settlement-ack", request, ExtSettlementAckResponse.class);
     }
 }
