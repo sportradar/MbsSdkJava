@@ -20,6 +20,11 @@ class TicketProtocolImpl implements TicketProtocol {
     }
 
     @Override
+    public CompletableFuture<TicketInformResponse> sendTicketInformAsync(final TicketInformRequest request) {
+        return engine.execute("ticket-placement-inform", request, TicketInformResponse.class);
+    }
+
+    @Override
     public CompletableFuture<TicketAckResponse> sendTicketAckAsync(final TicketAckRequest request) {
         return engine.execute("ticket-placement-ack", request, TicketAckResponse.class);
     }

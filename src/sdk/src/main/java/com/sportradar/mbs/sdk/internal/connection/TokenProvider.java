@@ -76,6 +76,10 @@ public class TokenProvider implements AutoCloseable {
             storeToken(newToken, auth.getExpiresIn() != null ? auth.getExpiresIn() : 0);
             return newToken;
         }
+        final String authErrMsg = getAuthErrMsg(auth);
+        if (authErrMsg != null) {
+            throw new AuthTokenFailureException(authErrMsg);
+        }
         sleep(config.getAuthRetryDelay().toMillis());
         return null;
     }
@@ -112,7 +116,23 @@ public class TokenProvider implements AutoCloseable {
     }
 
     private boolean isTokenOK(final String token) {
-        return token != null && token.length() > 0;
+        return isNotNullOrEmpty(token);
+    }
+
+    private String getAuthErrMsg(final AuthResponse authResponse) {
+        if (isNullOrEmpty(authResponse.getError())
+                && isNullOrEmpty(authResponse.getErrorDescription())) {
+            return null;
+        }
+        final StringBuilder result = new StringBuilder();
+        result.append("Auth error");
+        if (isNotNullOrEmpty(authResponse.getError())) {
+            result.append(": ").append(authResponse.getError());
+        }
+        if (isNotNullOrEmpty(authResponse.getErrorDescription())) {
+            result.append(": ").append(authResponse.getErrorDescription());
+        }
+        return result.toString();
     }
 
     private void storeToken(final String token, final int expiresIn) {
@@ -120,5 +140,13 @@ public class TokenProvider implements AutoCloseable {
             accessTokenExpiry = nowUtcMillis() + TimeUnit.SECONDS.toMillis(expiresIn - 1);
             accessToken = token;
         }
+    }
+
+    private boolean isNotNullOrEmpty(final String input) {
+        return !isNullOrEmpty(input);
+    }
+
+    private boolean isNullOrEmpty(final String input) {
+        return input == null || input.trim().length() == 0;
     }
 }

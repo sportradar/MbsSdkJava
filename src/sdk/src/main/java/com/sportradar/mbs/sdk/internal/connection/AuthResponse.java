@@ -13,6 +13,10 @@ public class AuthResponse {
     private String refreshToken;
     @JsonProperty("scope")
     private String scope;
+    @JsonProperty("error")
+    private String error;
+    @JsonProperty("error_description")
+    private String errorDescription;
 
     public String getAccessToken() {
         return accessToken;
@@ -52,5 +56,21 @@ public class AuthResponse {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
+
+    public void setErrorDescription(String errorDescription) {
+        this.errorDescription = errorDescription;
     }
 }

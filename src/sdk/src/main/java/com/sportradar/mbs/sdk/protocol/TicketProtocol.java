@@ -26,6 +26,19 @@ public interface TicketProtocol {
     }
 
     /**
+     * Sends a ticket inform request synchronously and returns the corresponding response.
+     *
+     * @param request the ticket inform request to be sent
+     * @return the ticket inform response received
+     * @throws ExecutionException   if the execution of the request encounters an exception wrapping the cause exception
+     * @throws InterruptedException if the execution of the request is interrupted
+     */
+    default TicketInformResponse sendTicketInform(TicketInformRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendTicketInformAsync(request).get();
+    }
+
+    /**
      * Sends a ticket acknowledgment request synchronously and returns the corresponding response.
      *
      * @param request the ticket acknowledgment request to be sent
@@ -123,6 +136,14 @@ public interface TicketProtocol {
      * @return a CompletableFuture representing the ticket response
      */
     CompletableFuture<TicketResponse> sendTicketAsync(TicketRequest request);
+
+    /**
+     * Sends a ticket inform request asynchronously and returns a CompletableFuture representing the response.
+     *
+     * @param request the ticket inform request to be sent
+     * @return a CompletableFuture representing the ticket inform response
+     */
+    CompletableFuture<TicketInformResponse> sendTicketInformAsync(TicketInformRequest request);
 
     /**
      * Sends a ticket acknowledgment request asynchronously and returns a CompletableFuture representing the response.
