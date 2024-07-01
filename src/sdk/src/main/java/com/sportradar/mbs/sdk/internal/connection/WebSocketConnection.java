@@ -88,7 +88,7 @@ public class WebSocketConnection implements AutoCloseable {
                 try {
                     sendMsg(ws, msgs);
                 } catch (final Exception e) {
-                    this.receiveQueue.add(new ExcWsOutputMessage(msg, new WebSocketConnectionException(e)));
+                    this.receiveQueue.add(new ExcWsOutputMessage(null, new WebSocketConnectionException(e)));
                     reconnectWebSocket(ws, false);
                     sendMsg(this.webSocket.get(), msgs);
                 }

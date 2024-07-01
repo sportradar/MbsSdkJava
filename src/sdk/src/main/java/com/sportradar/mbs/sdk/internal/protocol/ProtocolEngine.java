@@ -124,6 +124,10 @@ public class ProtocolEngine implements AutoCloseable {
             releaseAwaiter(awaiter.getCorrelationId());
             return;
         }
+        if (awaiter.getFuture().isDone()) {
+            releaseAwaiter(awaiter.getCorrelationId());
+            return;
+        }
 
         sendQueue.add(awaiter.getSendWsInputMessage());
 
@@ -253,6 +257,9 @@ public class ProtocolEngine implements AutoCloseable {
     }
 
     private boolean responseReceived(final String correlationId, final Response response) {
+        if (correlationId == null) {
+            return false;
+        }
         final Awaiter<?> awaiter = correlationIdAwaiter.get(correlationId);
         if (response.getContent() != null
                 && awaiter != null
@@ -265,6 +272,9 @@ public class ProtocolEngine implements AutoCloseable {
     }
 
     private boolean responseReceived(final String correlationId, final SdkException sdkException) {
+        if (correlationId == null) {
+            return false;
+        }
         final Awaiter<?> awaiter = correlationIdAwaiter.get(correlationId);
         if (awaiter != null) {
             awaiter.completeWithException(sdkException);
