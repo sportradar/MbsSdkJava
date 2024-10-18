@@ -43,6 +43,5 @@ jobs:
           mv .git/apidocs/* .
           mv .git/*.jar .
           git add .
-          ssh git@github.com
           git commit -am "Automated github page generation"
           git push origin gh-pages -f
