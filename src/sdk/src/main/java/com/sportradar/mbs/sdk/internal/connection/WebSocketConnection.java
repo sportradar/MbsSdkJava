@@ -8,13 +8,11 @@ import com.sportradar.mbs.sdk.internal.connection.msg.*;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsInputMessage;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsOutputMessage;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.framing.Framedata;
-import org.java_websocket.framing.TextFrame;
+import org.java_websocket.enums.Opcode;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,14 +100,9 @@ public class WebSocketConnection implements AutoCloseable {
     }
 
     private void sendMsg(final WebSocket ws, final List<ByteBuffer> msgs) {
-        final List<Framedata> frames = new ArrayList<>();
         for (int i = 0; i < msgs.size(); i++) {
-            final TextFrame frame = new TextFrame();
-            frame.setPayload(msgs.get(i));
-            frame.setFin(i == msgs.size() - 1);
-            frames.add(frame);
+            ws.sendFragmentedFrame(Opcode.TEXT, msgs.get(i), i == (msgs.size() - 1));
         }
-        ws.sendFrame(frames);
     }
 
     private void reconnectWebSocket(final WebSocket ws, final boolean throwExc) {

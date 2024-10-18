@@ -147,7 +147,7 @@ public class ProtocolEngine implements AutoCloseable {
         int offset = 0;
         while (offset < bytes.length) {
             final int chunkSize = Math.min(bytes.length - offset, MAX_CHUNK_SIZE);
-            final ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, offset + chunkSize);
+            final ByteBuffer buffer = ByteBuffer.wrap(bytes, offset, chunkSize);
             result.add(buffer);
             offset += chunkSize;
         }
