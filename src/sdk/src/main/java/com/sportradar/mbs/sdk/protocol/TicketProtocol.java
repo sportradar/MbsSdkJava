@@ -91,6 +91,19 @@ public interface TicketProtocol {
     }
 
     /**
+     * Sends a cashout inform request synchronously and returns the corresponding response.
+     *
+     * @param request a {@link CashoutInformRequest} to be sent
+     * @return a {@link CashoutInformResponse} received
+     * @throws ExecutionException   if the execution of the request encounters an exception wrapping the cause exception
+     * @throws InterruptedException if the execution of the request is interrupted
+     */
+    default CashoutInformResponse sendCashoutInform(CashoutInformRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendCashoutInformAsync(request).get();
+    }
+
+    /**
      * Sends a cashout acknowledgment request synchronously and returns the corresponding response.
      *
      * @param request the cashout acknowledgment request to be sent
@@ -176,6 +189,14 @@ public interface TicketProtocol {
      * @return a CompletableFuture representing the cashout response
      */
     CompletableFuture<CashoutResponse> sendCashoutAsync(CashoutRequest request);
+
+    /**
+     * Sends a {@link CashoutInformRequest} asynchronously and returns a {@link CompletableFuture} of {@link CashoutInformResponse}.
+     *
+     * @param request the cashout inform request to be sent
+     * @return a CompletableFuture of CashoutInformResponse
+     */
+    CompletableFuture<CashoutInformResponse> sendCashoutInformAsync(CashoutInformRequest request);
 
     /**
      * Sends a cashout acknowledgment request asynchronously and returns a CompletableFuture representing the response.
