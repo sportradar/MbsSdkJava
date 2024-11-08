@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = DepositInformResponse.class, name = "deposit-inform-reply"),
         @JsonSubTypes.Type(value = ExtSettlementAckResponse.class, name = "ext-settlement-ack-reply"),
         @JsonSubTypes.Type(value = CashoutResponse.class, name = "cashout-reply"),
+        @JsonSubTypes.Type(value = CashoutInformResponse.class, name = "cashout-inform-reply"),
         @JsonSubTypes.Type(value = TicketInformResponse.class, name = "ticket-inform-reply"),
         @JsonSubTypes.Type(value = CancelAckResponse.class, name = "cancel-ack-reply"),
         @JsonSubTypes.Type(value = CancelResponse.class, name = "cancel-reply"),
@@ -54,6 +55,15 @@ public class ContentResponse {
      */
     public static CashoutResponse.Builder newCashoutResponseBuilder() {
         return CashoutResponse.newBuilder();
+    }
+
+    /**
+     * Creates a new instance of the {@link CashoutInformResponse.Builder}.
+     *
+     * @return The CashoutInformResponse builder.
+     */
+    public static CashoutInformResponse.Builder newCashoutInformResponseBuilder() {
+        return CashoutInformResponse.newBuilder();
     }
 
     /**
