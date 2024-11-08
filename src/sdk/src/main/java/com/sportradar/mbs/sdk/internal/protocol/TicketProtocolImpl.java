@@ -45,6 +45,11 @@ class TicketProtocolImpl implements TicketProtocol {
     }
 
     @Override
+    public CompletableFuture<CashoutInformResponse> sendCashoutInformAsync(final CashoutInformRequest request) {
+        return engine.execute("cashout-inform", request, CashoutInformResponse.class);
+    }
+
+    @Override
     public CompletableFuture<CashoutAckResponse> sendCashoutAckAsync(final CashoutAckRequest request) {
         return engine.execute("ticket-cashout-ack", request, CashoutAckResponse.class);
     }
