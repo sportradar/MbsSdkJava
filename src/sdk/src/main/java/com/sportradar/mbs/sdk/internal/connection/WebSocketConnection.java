@@ -76,21 +76,20 @@ public class WebSocketConnection implements AutoCloseable {
                 if (msg == null) {
                     continue;
                 }
-                if (!(msg instanceof SendWsInputMessage)) {
+                if (msg instanceof SendWsInputMessage sendMsg) {
+                    final List<ByteBuffer> msgs = sendMsg.getContent();
+                    final WebSocket ws = this.webSocket.get();
+                    try {
+                        sendMsg(ws, msgs);
+                    } catch (final Exception e) {
+                        this.receiveQueue.add(new ExcWsOutputMessage(null, new WebSocketConnectionException(e)));
+                        reconnectWebSocket(ws, false);
+                        sendMsg(this.webSocket.get(), msgs);
+                    }
+                    this.receiveQueue.add(new SentWsOutputMessage(msg));
+                } else {
                     this.receiveQueue.add(new NotProcessedWsOutputMessage(msg));
-                    continue;
                 }
-
-                final List<ByteBuffer> msgs = ((SendWsInputMessage) msg).getContent();
-                final WebSocket ws = this.webSocket.get();
-                try {
-                    sendMsg(ws, msgs);
-                } catch (final Exception e) {
-                    this.receiveQueue.add(new ExcWsOutputMessage(null, new WebSocketConnectionException(e)));
-                    reconnectWebSocket(ws, false);
-                    sendMsg(this.webSocket.get(), msgs);
-                }
-                this.receiveQueue.add(new SentWsOutputMessage(msg));
 
             } catch (final InterruptedException ignored) {
             } catch (final Exception exception) {
@@ -155,11 +154,11 @@ public class WebSocketConnection implements AutoCloseable {
 
     public static class WebSocket extends WebSocketClient {
 
-        private final WebSocketConnection parentConnection;
+        private final WebSocketConnection connection;
 
-        public WebSocket(final WebSocketConnection parentConnection, final URI serverUri, final String token) {
+        public WebSocket(final WebSocketConnection connection, final URI serverUri, final String token) {
             super(serverUri, headers(token));
-            this.parentConnection = parentConnection;
+            this.connection = connection;
         }
 
         private static Map<String, String> headers(final String token) {
@@ -170,22 +169,22 @@ public class WebSocketConnection implements AutoCloseable {
 
         @Override
         public void onOpen(final ServerHandshake serverHandshake) {
-            this.parentConnection.onOpen(this, serverHandshake);
+            this.connection.onOpen(this, serverHandshake);
         }
 
         @Override
         public void onMessage(final String msg) {
-            this.parentConnection.onMessage(this, msg);
+            this.connection.onMessage(this, msg);
         }
 
         @Override
         public void onClose(final int code, final String msg, final boolean remote) {
-            this.parentConnection.onClose(this, code, msg, remote);
+            this.connection.onClose(this, code, msg, remote);
         }
 
         @Override
         public void onError(final Exception exception) {
-            this.parentConnection.onError(this, exception);
+            this.connection.onError(this, exception);
         }
     }
 }
