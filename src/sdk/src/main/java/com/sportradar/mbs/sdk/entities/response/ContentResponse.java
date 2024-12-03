@@ -26,7 +26,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ExtSettlementResponse.class, name = "ext-settlement-reply"),
         @JsonSubTypes.Type(value = CashoutAckResponse.class, name = "cashout-ack-reply"),
         @JsonSubTypes.Type(value = TicketResponse.class, name = "ticket-reply"),
-        @JsonSubTypes.Type(value = WithdrawalInformResponse.class, name = "withdrawal-inform-reply")
+        @JsonSubTypes.Type(value = WithdrawalInformResponse.class, name = "withdrawal-inform-reply"),
+        @JsonSubTypes.Type(value = MaxStakeResponse.class, name = "max-stake-reply")
 })
 public class ContentResponse {
 
@@ -164,4 +165,14 @@ public class ContentResponse {
     public static WithdrawalInformResponse.Builder newWithdrawalInformResponseBuilder() {
         return WithdrawalInformResponse.newBuilder();
     }
+
+    /**
+     * Creates a new instance of the MaxStakeResponse builder.
+     *
+     * @return The MaxStakeResponse builder.
+     */
+    public static MaxStakeResponse.Builder newMaxStakeResponseBuilder() {
+        return MaxStakeResponse.newBuilder();
+    }
+
 }

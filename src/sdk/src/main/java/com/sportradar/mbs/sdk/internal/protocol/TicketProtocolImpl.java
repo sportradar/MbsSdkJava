@@ -63,4 +63,9 @@ class TicketProtocolImpl implements TicketProtocol {
     public CompletableFuture<ExtSettlementAckResponse> sendExtSettlementAckAsync(final ExtSettlementAckRequest request) {
         return engine.execute("ticket-ext-settlement-ack", request, ExtSettlementAckResponse.class);
     }
+
+    @Override
+    public CompletableFuture<MaxStakeResponse> sendMaxStakeAsync(MaxStakeRequest request) {
+        return engine.execute("max-stake", request, MaxStakeResponse.class);
+    }
 }

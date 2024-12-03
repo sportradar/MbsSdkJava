@@ -143,6 +143,19 @@ public interface TicketProtocol {
     }
 
     /**
+     * Sends a max stake request synchronously and returns the corresponding response.
+     *
+     * @param request the max stake request to be sent
+     * @return the max stake response received
+     * @throws ExecutionException   if the execution of the request encounters an exception wrapping the cause exception
+     * @throws InterruptedException if the execution of the request is interrupted
+     */
+    default MaxStakeResponse sendMaxStake(MaxStakeRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendMaxStakeAsync(request).get();
+    }
+
+    /**
      * Sends a ticket request asynchronously and returns a CompletableFuture representing the response.
      *
      * @param request the ticket request to be sent
@@ -221,4 +234,12 @@ public interface TicketProtocol {
      * @return a CompletableFuture representing the external settlement acknowledgment response
      */
     CompletableFuture<ExtSettlementAckResponse> sendExtSettlementAckAsync(ExtSettlementAckRequest request);
+
+    /**
+     * Sends a max stake request asynchronously and returns a CompletableFuture representing the response.
+     *
+     * @param request the max stake request to be sent
+     * @return a CompletableFuture representing the max stake response
+     */
+    CompletableFuture<MaxStakeResponse> sendMaxStakeAsync(MaxStakeRequest request);
 }
