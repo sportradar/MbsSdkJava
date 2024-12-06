@@ -5,7 +5,7 @@
     <groupId>com.sportradar.mbs.sdk</groupId>
     <artifactId>mbs-sdk-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.5</version>
+    <version>0.9.5-SNAPSHOT</version>
     <name>MBS SDK</name>
     <description>MBS SDK is a client library that enables easier integration with the Sportradar MBS</description>
     <inceptionYear>2024</inceptionYear>
