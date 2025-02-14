@@ -4,6 +4,7 @@ import com.sportradar.mbs.sdk.exceptions.SdkException;
 import com.sportradar.mbs.sdk.exceptions.SdkNotConnectedException;
 import com.sportradar.mbs.sdk.internal.protocol.ProtocolProvider;
 import com.sportradar.mbs.sdk.internal.utils.ExcSuppress;
+import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 import com.sportradar.mbs.sdk.protocol.TicketProtocol;
 
 import java.util.function.BiConsumer;
@@ -39,6 +40,15 @@ public class MbsSdk implements AutoCloseable {
      */
     public TicketProtocol getTicketProtocol() {
         return this.protocolProvider.getTicketProtocol();
+    }
+
+    /**
+     * Gets the account protocol for interacting with the MBS server.
+     *
+     * @return The account protocol.
+     */
+    public AccountProtocol getAccountProtocol() {
+        return this.protocolProvider.getAccountProtocol();
     }
 
     /**
