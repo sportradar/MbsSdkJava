@@ -13,6 +13,8 @@ public class BetValidation {
     private String betId;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("rejected")
+    private boolean rejected;
 
     /**
      * Creates a new instance of the BetValidation class.
@@ -78,6 +80,24 @@ public class BetValidation {
     }
 
     /**
+     * Gets the rejected boolean value of the bet validation.
+     *
+     * @return The rejected boolean value of the bet validation.
+     */
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    /**
+     * Sets the rejected boolean value of the bet validation.
+     *
+     * @param rejected The rejected boolean value of the bet validation.
+     */
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
+
+    /**
      * Represents a builder for the BetValidation class.
      */
     public static class Builder {
@@ -126,6 +146,17 @@ public class BetValidation {
          */
         public Builder setMessage(String value) {
             this.instance.setMessage(value);
+            return this;
+        }
+
+        /**
+         * Sets the rejected boolean value of the bet validation.
+         *
+         * @param value The rejected boolean value of the bet validation.
+         * @return The builder instance.
+         */
+        public Builder setRejected(boolean value) {
+            this.instance.setRejected(value);
             return this;
         }
     }
