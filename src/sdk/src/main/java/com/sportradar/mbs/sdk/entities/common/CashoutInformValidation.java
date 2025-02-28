@@ -12,7 +12,7 @@ public class CashoutInformValidation {
     @JsonProperty("message")
     private String message;
     @JsonProperty("rejected")
-    private Boolean rejected;
+    private boolean rejected;
 
     /**
      * Creates a new instance of the {@link CashoutInformValidation.Builder}.
@@ -64,7 +64,7 @@ public class CashoutInformValidation {
      *
      * @return The rejected boolean value of the cashout inform validation.
      */
-    public Boolean isRejected() {
+    public boolean isRejected() {
         return rejected;
     }
 
@@ -73,7 +73,7 @@ public class CashoutInformValidation {
      *
      * @param rejected The rejected boolean value of the cashout inform validation.
      */
-    public void setRejected(Boolean rejected) {
+    public void setRejected(boolean rejected) {
         this.rejected = rejected;
     }
 
@@ -124,7 +124,7 @@ public class CashoutInformValidation {
          * @param value The rejected boolean value of the cashout inform validation.
          * @return The builder instance.
          */
-        public Builder setRejected(Boolean value) {
+        public Builder setRejected(boolean value) {
             this.instance.setRejected(value);
             return this;
         }
