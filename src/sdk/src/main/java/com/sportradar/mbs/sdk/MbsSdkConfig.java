@@ -31,6 +31,7 @@ public class MbsSdkConfig {
     private Duration wsReceiveMessageTimeout;
     private Duration wsConsumerGraceTimeout;
     private Duration wsRefreshConnectionTimeout;
+    private Duration wsPingInterval;
     private Integer wsNumberOfConnections;
     private BiConsumer<MbsSdk, Exception> unhandledExceptionHandler;
 
@@ -377,10 +378,28 @@ public class MbsSdkConfig {
     /**
      * Sets the timeout for refreshing the WebSocket connection.
      *
-     * @param wsRefreshConnectionTimeout The timeout for refreshing the WebSocket connection to set.
+     * @param wsRefreshConnectionTimeout The timeout for refreshing the WebSocket connection.
      */
     public void setWsRefreshConnectionTimeout(Duration wsRefreshConnectionTimeout) {
         this.wsRefreshConnectionTimeout = wsRefreshConnectionTimeout;
+    }
+
+    /**
+     * Gets the interval of WebSocket connection ping.
+     *
+     * @return  The interval of WebSocket connection ping.
+     */
+    public Duration getWsPingInterval() {
+        return wsPingInterval;
+    }
+
+    /**
+     * Sets the interval of WebSocket connection ping.
+     *
+     * @param wsPingInterval The interval of WebSocket connection ping.
+     */
+    public void setWsPingInterval(Duration wsPingInterval) {
+        this.wsPingInterval = wsPingInterval;
     }
 
     /**

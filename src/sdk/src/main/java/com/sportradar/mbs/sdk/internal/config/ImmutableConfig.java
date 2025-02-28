@@ -37,6 +37,7 @@ public class ImmutableConfig implements
     private final Duration wsReceiveMessageTimeout;
     private final Duration wsConsumerGraceTimeout;
     private final Duration wsRefreshConnectionTimeout;
+    private final Duration wsPingInterval;
     private final int wsNumberOfConnections;
 
     public ImmutableConfig(final MbsSdkConfig config) {
@@ -47,13 +48,13 @@ public class ImmutableConfig implements
         this.wsServer = notNull(config.getWsServer(), "wsServer");
         this.operatorId = config.getOperatorId();
         this.authRequestTimeout = withDefault(config.getAuthRetryDelay(), Duration.ofSeconds(5), MIN_DURATION);
-        this.authRetryDelay = withDefault(config.getAuthRetryDelay(), Duration.ofMillis(500), MIN_DURATION);
+        this.authRetryDelay = withDefault(config.getAuthRetryDelay(), Duration.ofSeconds(1), MIN_DURATION);
         this.wsNumberOfConnections = withDefault(config.getWsNumberOfConnections(), 1, 1);
         this.wsReconnectTimeout = withDefault(config.getWsReconnectTimeout(), Duration.ofSeconds(10), MIN_DURATION);
         this.wsFetchMessageTimeout = withDefault(config.getWsFetchMessageTimeout(), Duration.ofSeconds(1), MIN_DURATION);
         this.wsSendMessageTimeout = withDefault(config.getWsSendMessageTimeout(), Duration.ofSeconds(1), MIN_DURATION);
         this.wsReceiveMessageTimeout = withDefault(config.getWsReceiveMessageTimeout(), Duration.ofSeconds(30), MIN_DURATION);
-        this.wsConsumerGraceTimeout = withDefault(config.getWsConsumerGraceTimeout(), Duration.ofMinutes(1), MIN_DURATION);
+        this.wsConsumerGraceTimeout = withDefault(config.getWsConsumerGraceTimeout(), Duration.ofMinutes(10), MIN_DURATION);
         this.wsRefreshConnectionTimeout = withDefault(config.getWsRefreshConnectionTimeout(), Duration.ofMinutes(100), MIN_DURATION);
         this.protocolRetryCount = withDefault(config.getProtocolRetryCount(), 0, 0);
         this.protocolMaxSendBufferSize = withDefault(config.getProtocolMaxSendBufferSize(), 1_000, 1);
@@ -61,6 +62,7 @@ public class ImmutableConfig implements
         this.protocolReceiveResponseTimeout = withDefault(config.getProtocolReceiveResponseTimeout(), Duration.ofSeconds(20), MIN_DURATION);
         this.protocolEnqueueTimeout = withDefault(config.getProtocolEnqueueTimeout(), Duration.ofMillis(100), MIN_DURATION);
         this.protocolDequeueTimeout = withDefault(config.getProtocolDequeueTimeout(), Duration.ofSeconds(1), MIN_DURATION);
+        this.wsPingInterval = withDefault(config.getWsPingInterval(), Duration.ofMinutes(1), MIN_DURATION);
         this.protocolNumberOfDispatchers = withDefault(config.getProtocolNumberOfDispatchers(), 1, 1);
     }
 
@@ -172,5 +174,10 @@ public class ImmutableConfig implements
     @Override
     public int getWsNumberOfConnections() {
         return wsNumberOfConnections;
+    }
+
+    @Override
+    public Duration getWsPingInterval() {
+        return wsPingInterval;
     }
 }

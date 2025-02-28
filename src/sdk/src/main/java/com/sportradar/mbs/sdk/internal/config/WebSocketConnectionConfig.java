@@ -18,4 +18,6 @@ public interface WebSocketConnectionConfig {
     Duration getWsConsumerGraceTimeout();
 
     Duration getWsRefreshConnectionTimeout();
+
+    Duration getWsPingInterval();
 }

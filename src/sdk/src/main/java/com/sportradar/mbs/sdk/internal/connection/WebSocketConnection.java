@@ -100,7 +100,7 @@ public class WebSocketConnection implements AutoCloseable {
 
     private void sendMsg(final WebSocket ws, final List<ByteBuffer> msgs) {
         for (int i = 0; i < msgs.size(); i++) {
-            ws.sendFragmentedFrame(Opcode.TEXT, msgs.get(i), i == (msgs.size() - 1));
+            ws.sendFragmentedFrame(Opcode.TEXT, msgs.get(i).duplicate(), i == (msgs.size() - 1));
         }
     }
 
@@ -110,7 +110,7 @@ public class WebSocketConnection implements AutoCloseable {
         }
         final WebSocket newWs;
         try {
-            newWs = new WebSocket(this, config.getWsServer(), tokenProvider.getToken());
+            newWs = new WebSocket(this);
             if (!newWs.connectBlocking(config.getWsReconnectTimeout().toMillis(), MILLISECONDS)) {
                 throw new WebSocketConnectionException("Socket connect failed.");
             }
@@ -126,9 +126,9 @@ public class WebSocketConnection implements AutoCloseable {
         }
         if (this.webSocket.compareAndSet(ws, newWs)) {
             if (ws != null) {
-                delay(ws::close, config.getWsConsumerGraceTimeout().toMillis(), MILLISECONDS);
+                delay(ws::close, config.getWsConsumerGraceTimeout());
             }
-            delay(() -> reconnectWebSocket(newWs, false), config.getWsRefreshConnectionTimeout().toMillis(), MILLISECONDS);
+            delay(() -> reconnectWebSocket(newWs, false), config.getWsRefreshConnectionTimeout());
         } else {
             newWs.close();
         }
@@ -156,12 +156,23 @@ public class WebSocketConnection implements AutoCloseable {
 
         private final WebSocketConnection connection;
 
-        public WebSocket(final WebSocketConnection connection, final URI serverUri, final String token) {
-            super(serverUri, headers(token));
+        public WebSocket(final WebSocketConnection connection) {
+            super(serverUri(connection), headers(connection));
+            this.setConnectionLostTimeout(getPingInterval(connection));
             this.connection = connection;
         }
 
-        private static Map<String, String> headers(final String token) {
+        private static URI serverUri(final WebSocketConnection connection) {
+            return connection.config.getWsServer();
+        }
+
+        private static int getPingInterval(final WebSocketConnection connection) {
+            final long interval = connection.config.getWsPingInterval().toSeconds();
+            return (int) Math.max(10, Math.min(300, interval));
+        }
+
+        private static Map<String, String> headers(final WebSocketConnection connection) {
+            final String token = connection.tokenProvider.getToken();
             final Map<String, String> headers = new HashMap<>();
             headers.put("Authorization", "Bearer " + token);
             return headers;
