@@ -10,7 +10,8 @@ import java.util.Map;
 public enum BalanceMoveStatus {
     APPROVED("approved"),
     PENDING("pending"),
-    REJECTED("rejected");
+    REJECTED("rejected"),
+    CANCELLED("cancelled");
 
     private static final Map<String, BalanceMoveStatus> VALUES = new HashMap();
 

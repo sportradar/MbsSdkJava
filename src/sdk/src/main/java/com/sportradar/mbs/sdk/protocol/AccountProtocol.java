@@ -1,13 +1,7 @@
 package com.sportradar.mbs.sdk.protocol;
 
-import com.sportradar.mbs.sdk.entities.request.AccountStatusInformRequest;
-import com.sportradar.mbs.sdk.entities.request.FinancialLimitInformRequest;
-import com.sportradar.mbs.sdk.entities.request.LimitReachedInformRequest;
-import com.sportradar.mbs.sdk.entities.request.SessionLimitInformRequest;
-import com.sportradar.mbs.sdk.entities.response.AccountStatusInformResponse;
-import com.sportradar.mbs.sdk.entities.response.FinancialLimitInformResponse;
-import com.sportradar.mbs.sdk.entities.response.LimitReachedInformResponse;
-import com.sportradar.mbs.sdk.entities.response.SessionLimitInformResponse;
+import com.sportradar.mbs.sdk.entities.request.*;
+import com.sportradar.mbs.sdk.entities.response.*;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -70,6 +64,10 @@ public interface AccountProtocol {
         return this.sendSessionLimitInformAsync(request).get();
     }
 
+    default InterventionInformResponse sendInterventionInform(InterventionInformRequest request) throws ExecutionException, InterruptedException {
+        return this.InterventionInformAsync(request).get();
+    }
+
     /**
      * Sends an account status inform request asynchronously.
      *
@@ -101,4 +99,7 @@ public interface AccountProtocol {
      * @return A CompletableFuture representing the session limit inform response.
      */
     CompletableFuture<SessionLimitInformResponse> sendSessionLimitInformAsync(SessionLimitInformRequest request);
+
+    CompletableFuture<InterventionInformResponse> InterventionInformAsync(InterventionInformRequest request);
+
 }

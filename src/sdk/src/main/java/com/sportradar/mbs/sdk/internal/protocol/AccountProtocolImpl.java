@@ -1,13 +1,7 @@
 package com.sportradar.mbs.sdk.internal.protocol;
 
-import com.sportradar.mbs.sdk.entities.request.AccountStatusInformRequest;
-import com.sportradar.mbs.sdk.entities.request.FinancialLimitInformRequest;
-import com.sportradar.mbs.sdk.entities.request.LimitReachedInformRequest;
-import com.sportradar.mbs.sdk.entities.request.SessionLimitInformRequest;
-import com.sportradar.mbs.sdk.entities.response.AccountStatusInformResponse;
-import com.sportradar.mbs.sdk.entities.response.FinancialLimitInformResponse;
-import com.sportradar.mbs.sdk.entities.response.LimitReachedInformResponse;
-import com.sportradar.mbs.sdk.entities.response.SessionLimitInformResponse;
+import com.sportradar.mbs.sdk.entities.request.*;
+import com.sportradar.mbs.sdk.entities.response.*;
 import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +25,7 @@ public class AccountProtocolImpl implements AccountProtocol {
     public AccountProtocolImpl(final ProtocolEngine engine) {
         this.engine = engine;
     }
+
 
     /**
      * Sends an asynchronous request to retrieve account status information.
@@ -74,5 +69,10 @@ public class AccountProtocolImpl implements AccountProtocol {
     @Override
     public CompletableFuture<SessionLimitInformResponse> sendSessionLimitInformAsync(final SessionLimitInformRequest request) {
         return engine.execute("session-limit-inform", request, SessionLimitInformResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<InterventionInformResponse> InterventionInformAsync(InterventionInformRequest request) {
+        return engine.execute("intervention-inform", request, InterventionInformResponse.class);
     }
 }

@@ -27,7 +27,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = WithdrawalInformRequest.class, name = "withdrawal-inform"),
         @JsonSubTypes.Type(value = ExtSettlementAckRequest.class, name = "ext-settlement-ack"),
         @JsonSubTypes.Type(value = BalanceChangeInformRequest.class, name = "balance-change-inform"),
-        @JsonSubTypes.Type(value = MaxStakeRequest.class, name = "max-stake")
+        @JsonSubTypes.Type(value = MaxStakeRequest.class, name = "max-stake"),
+        @JsonSubTypes.Type(value = AccountStatusInformRequest.class, name = "account-status-inform"),
+        @JsonSubTypes.Type(value = FinancialLimitInformRequest.class, name = "financial-limit-inform"),
+        @JsonSubTypes.Type(value = LimitReachedInformRequest.class, name = "limit-reached-inform"),
+        @JsonSubTypes.Type(value = SessionLimitInformRequest.class, name = "session-limit-inform"),
+        @JsonSubTypes.Type(value = InterventionInformRequest.class, name = "intervention-inform")
 })
 public class ContentRequest {
 
