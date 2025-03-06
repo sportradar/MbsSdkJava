@@ -13,6 +13,27 @@ public class ErrorResponse extends ContentResponse {
     @JsonProperty("code")
     private int errorCode;
 
+    @JsonProperty("signature")
+    private String signature; // Signature for authentication or verification
+
+    /**
+     * Retrieves the signature.
+     *
+     * @return the signature string
+     */
+    public String getSignature() {
+        return this.signature;
+    }
+
+    /**
+     * Sets the signature.
+     *
+     * @param value the signature to set
+     */
+    public void setSignature(String value) {
+        this.signature = value;
+    }
+
     /**
      * Creates a new instance of ErrorResponse.Builder.
      *

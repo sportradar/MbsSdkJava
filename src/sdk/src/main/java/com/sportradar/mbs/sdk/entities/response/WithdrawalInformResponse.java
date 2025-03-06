@@ -11,6 +11,26 @@ public class WithdrawalInformResponse extends ContentResponse {
     private int code;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("signature")
+    private String signature; // Signature for authentication or verification
+
+    /**
+     * Retrieves the signature.
+     *
+     * @return the signature string
+     */
+    public String getSignature() {
+        return this.signature;
+    }
+
+    /**
+     * Sets the signature.
+     *
+     * @param value the signature to set
+     */
+    public void setSignature(String value) {
+        this.signature = value;
+    }
 
     /**
      * Creates a new instance of WithdrawalInformResponse.Builder.
@@ -97,5 +117,15 @@ public class WithdrawalInformResponse extends ContentResponse {
             this.instance.setMessage(value);
             return this;
         }
+
+        /**
+         * Sets the signature.
+         *
+         * @param value the signature to set
+         */
+        public void setSignature(String value) {
+            this.instance.signature = value;
+        }
+
     }
 }
