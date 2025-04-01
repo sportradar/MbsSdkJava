@@ -1,4 +1,4 @@
-package com.sportradar.mbs.sdk.entities.common;
+package com.sportradar.mbs.sdk.entities.accountlimit;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -7,28 +7,28 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum Initiator {
-    REGULATOR("regulator"),
-    OTHER("other"),
-    OPERATOR("operator"),
-    PLAYER("player");
+public enum AccountLimitType {
+    LOSS("loss"),
+    DEPOSIT("deposit"),
+    SESSION("session"),
+    STAKE("stake");
 
-    private static final Map<String, Initiator> VALUES = new HashMap<>();
+    private static final Map<String, AccountLimitType> VALUES = new HashMap();
 
     static {
-        for (final Initiator val : EnumSet.allOf(Initiator.class)) {
+        for (final AccountLimitType val : EnumSet.allOf(AccountLimitType.class)) {
             VALUES.put(val.jsonVal, val);
         }
     }
 
     private final String jsonVal;
 
-    Initiator(final String jsonVal) {
+    AccountLimitType(final String jsonVal) {
         this.jsonVal = jsonVal;
     }
 
     @JsonCreator
-    public static Initiator fromValue(final String value) {
+    public static AccountLimitType fromValue(final String value) {
         return value == null ? null : VALUES.get(value);
     }
 

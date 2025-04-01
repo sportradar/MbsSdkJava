@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum OddsChange {
-    NONE("none"),
-    ANY("any"),
     HIGHER("higher"),
-    LOWER("lower");
+    LOWER("lower"),
+    ANY("any"),
+    NONE("none");
 
     private static final Map<String, OddsChange> VALUES = new HashMap();
 

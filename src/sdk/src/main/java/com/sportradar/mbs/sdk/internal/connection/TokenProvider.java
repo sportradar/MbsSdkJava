@@ -23,6 +23,7 @@ public class TokenProvider implements AutoCloseable {
 
     private String accessToken;
     private long accessTokenExpiry;
+    private String accessAuthError;
 
     public TokenProvider(final ImmutableConfig config) {
         this.config = config;
@@ -44,7 +45,7 @@ public class TokenProvider implements AutoCloseable {
         try {
             Exception possibleExc = null;
             String token = null;
-            for (var i = 0; i < 10 && token == null; i++) {
+            for (var i = 0; i < 3 && token == null; i++) {
                 try {
                     token = fetchToken();
                 } catch (final Exception e) {
@@ -67,17 +68,18 @@ public class TokenProvider implements AutoCloseable {
 
     private String fetchToken() {
         final String oldToken = readToken();
-        if (isTokenOK(oldToken)) {
+        if (isNotNullOrEmpty(oldToken)) {
             return oldToken;
         }
         final AuthResponse auth = fetchAuthResponse();
         final String newToken = auth.getAccessToken();
-        if (isTokenOK(newToken)) {
+        if (isNotNullOrEmpty(newToken)) {
             storeToken(newToken, auth.getExpiresIn() != null ? auth.getExpiresIn() : 0);
             return newToken;
         }
         final String authErrMsg = getAuthErrMsg(auth);
-        if (authErrMsg != null) {
+        if (isNotNullOrEmpty(authErrMsg)) {
+            storeAuthError(authErrMsg);
             throw new AuthTokenFailureException(authErrMsg);
         }
         sleep(config.getAuthRetryDelay().toMillis());
@@ -107,16 +109,22 @@ public class TokenProvider implements AutoCloseable {
 
     private String readToken() {
         final String token = accessToken;
-        if (!isTokenOK(token)) {
-            return null;
+        if (isNullOrEmpty(token)) {
+            return readAuthError();
         }
-
         final long now = nowUtcMillis();
         return now > accessTokenExpiry ? null : token;
     }
 
-    private boolean isTokenOK(final String token) {
-        return isNotNullOrEmpty(token);
+    private String readAuthError() {
+        final String err = accessAuthError;
+        if (isNotNullOrEmpty(err)) {
+            final long now = nowUtcMillis();
+            if (now < accessTokenExpiry) {
+                throw new AuthTokenFailureException(err);
+            }
+        }
+        return null;
     }
 
     private String getAuthErrMsg(final AuthResponse authResponse) {
@@ -139,7 +147,14 @@ public class TokenProvider implements AutoCloseable {
         if (expiresIn > 1) {
             accessTokenExpiry = nowUtcMillis() + TimeUnit.SECONDS.toMillis(expiresIn - 1);
             accessToken = token;
+            accessAuthError = null;
         }
+    }
+
+    private void storeAuthError(final String error) {
+        accessTokenExpiry = nowUtcMillis() + TimeUnit.SECONDS.toMillis(60);
+        accessToken = null;
+        accessAuthError = error;
     }
 
     private boolean isNotNullOrEmpty(final String input) {
@@ -147,6 +162,6 @@ public class TokenProvider implements AutoCloseable {
     }
 
     private boolean isNullOrEmpty(final String input) {
-        return input == null || input.trim().length() == 0;
+        return input == null || input.trim().isEmpty();
     }
 }

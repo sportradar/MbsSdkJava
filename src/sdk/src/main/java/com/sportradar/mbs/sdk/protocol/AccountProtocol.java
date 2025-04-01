@@ -1,7 +1,13 @@
 package com.sportradar.mbs.sdk.protocol;
 
-import com.sportradar.mbs.sdk.entities.request.*;
-import com.sportradar.mbs.sdk.entities.response.*;
+import com.sportradar.mbs.sdk.entities.request.AccountInterventionInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountLimitInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountLimitReachedInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountStatusInformRequest;
+import com.sportradar.mbs.sdk.entities.response.AccountInterventionInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountLimitInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountLimitReachedInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountStatusInformResponse;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -13,59 +19,55 @@ import java.util.concurrent.ExecutionException;
 public interface AccountProtocol {
 
     /**
-     * Sends an account status inform request synchronously.
-     * Calls the asynchronous method and waits for the result.
+     * Sends a status inform request synchronously.
      *
-     * @param request The request object containing account details.
-     * @return The account status response.
+     * @param request The request object containing status details.
+     * @return The status inform response.
      * @throws ExecutionException   If the computation threw an exception.
      * @throws InterruptedException If the current thread was interrupted while waiting.
      */
-    default AccountStatusInformResponse sendAccountStatusInform(AccountStatusInformRequest request) throws ExecutionException, InterruptedException {
-        return this.sendAccountStatusAsync(request).get();
+    default AccountStatusInformResponse sendStatusInform(AccountStatusInformRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendStatusInformAsync(request).get();
     }
 
     /**
-     * Sends a financial limit inform request synchronously.
-     * Calls the asynchronous method and waits for the result.
+     * Sends a limit inform request synchronously.
      *
-     * @param request The request object containing financial limit details.
-     * @return The financial limit inform response.
+     * @param request The request object containing limit details.
+     * @return The limit inform response.
      * @throws ExecutionException   If the computation threw an exception.
      * @throws InterruptedException If the current thread was interrupted while waiting.
      */
-    default FinancialLimitInformResponse sendFinancialLimitInform(FinancialLimitInformRequest request) throws ExecutionException, InterruptedException {
-        return this.sendFinancialLimitInformAsync(request).get();
+    default AccountLimitInformResponse sendLimitInform(AccountLimitInformRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendLimitInformAsync(request).get();
     }
 
     /**
      * Sends a limit reached inform request synchronously.
-     * Calls the asynchronous method and waits for the result.
      *
-     * @param request The request object indicating a limit has been reached.
+     * @param request The request object containing limit reached details.
      * @return The limit reached inform response.
      * @throws ExecutionException   If the computation threw an exception.
      * @throws InterruptedException If the current thread was interrupted while waiting.
      */
-    default LimitReachedInformResponse sendLimitReachedInform(LimitReachedInformRequest request) throws ExecutionException, InterruptedException {
+    default AccountLimitReachedInformResponse sendLimitReachedInform(AccountLimitReachedInformRequest request)
+            throws ExecutionException, InterruptedException {
         return this.sendLimitReachedInformAsync(request).get();
     }
 
     /**
-     * Sends a session limit inform request synchronously.
-     * Calls the asynchronous method and waits for the result.
+     * Sends a session limit inform request.
      *
      * @param request The request object containing session limit details.
-     * @return The session limit inform response.
+     * @return An intervention inform response.
      * @throws ExecutionException   If the computation threw an exception.
      * @throws InterruptedException If the current thread was interrupted while waiting.
      */
-    default SessionLimitInformResponse sendSessionLimitInform(SessionLimitInformRequest request) throws ExecutionException, InterruptedException {
-        return this.sendSessionLimitInformAsync(request).get();
-    }
-
-    default InterventionInformResponse sendInterventionInform(InterventionInformRequest request) throws ExecutionException, InterruptedException {
-        return this.InterventionInformAsync(request).get();
+    default AccountInterventionInformResponse sendInterventionInform(AccountInterventionInformRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendInterventionInformAsync(request).get();
     }
 
     /**
@@ -74,15 +76,17 @@ public interface AccountProtocol {
      * @param request The request object containing account details.
      * @return A CompletableFuture representing the account status response.
      */
-    CompletableFuture<AccountStatusInformResponse> sendAccountStatusAsync(AccountStatusInformRequest request);
+    CompletableFuture<AccountStatusInformResponse> sendStatusInformAsync(
+            AccountStatusInformRequest request);
 
     /**
-     * Sends a financial limit inform request asynchronously.
+     * Sends a limit inform request asynchronously.
      *
-     * @param request The request object containing financial limit details.
-     * @return A CompletableFuture representing the financial limit inform response.
+     * @param request The request object containing limit details.
+     * @return A CompletableFuture representing the limit inform response.
      */
-    CompletableFuture<FinancialLimitInformResponse> sendFinancialLimitInformAsync(FinancialLimitInformRequest request);
+    CompletableFuture<AccountLimitInformResponse> sendLimitInformAsync(
+            AccountLimitInformRequest request);
 
     /**
      * Sends a limit reached inform request asynchronously.
@@ -90,16 +94,15 @@ public interface AccountProtocol {
      * @param request The request object indicating a limit has been reached.
      * @return A CompletableFuture representing the limit reached inform response.
      */
-    CompletableFuture<LimitReachedInformResponse> sendLimitReachedInformAsync(LimitReachedInformRequest request);
+    CompletableFuture<AccountLimitReachedInformResponse> sendLimitReachedInformAsync(
+            AccountLimitReachedInformRequest request);
 
     /**
-     * Sends a session limit inform request asynchronously.
+     * Sends an intervention inform request asynchronously.
      *
-     * @param request The request object containing session limit details.
-     * @return A CompletableFuture representing the session limit inform response.
+     * @param request The request object containing intervention details.
+     * @return A CompletableFuture representing the intervention inform response.
      */
-    CompletableFuture<SessionLimitInformResponse> sendSessionLimitInformAsync(SessionLimitInformRequest request);
-
-    CompletableFuture<InterventionInformResponse> InterventionInformAsync(InterventionInformRequest request);
-
+    CompletableFuture<AccountInterventionInformResponse> sendInterventionInformAsync(
+            AccountInterventionInformRequest request);
 }

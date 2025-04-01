@@ -7,6 +7,7 @@ import com.sportradar.mbs.sdk.internal.config.WebSocketConnectionConfig;
 import com.sportradar.mbs.sdk.internal.connection.msg.*;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsInputMessage;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsOutputMessage;
+import com.sportradar.mbs.sdk.internal.utils.TimeUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.enums.Opcode;
 import org.java_websocket.handshake.ServerHandshake;
@@ -30,6 +31,7 @@ public class WebSocketConnection implements AutoCloseable {
     private final BlockingQueue<WsInputMessage> sendQueue;
     private final BlockingQueue<WsOutputMessage> receiveQueue;
     private final AtomicReference<WebSocket> webSocket;
+    private final ConnectLimiter limiter;
 
     private volatile boolean connected = false;
 
@@ -45,6 +47,7 @@ public class WebSocketConnection implements AutoCloseable {
         this.sendQueue = sendQueue;
         this.receiveQueue = receiveQueue;
         this.webSocket = new AtomicReference<>(null);
+        this.limiter = new ConnectLimiter();
     }
 
     public void connect() {
@@ -76,7 +79,7 @@ public class WebSocketConnection implements AutoCloseable {
                 if (msg == null) {
                     continue;
                 }
-                if (msg instanceof SendWsInputMessage sendMsg) {
+                if (msg instanceof SendWsInputMessage sendMsg && !sendMsg.isSuppressed()) {
                     final List<ByteBuffer> msgs = sendMsg.getContent();
                     final WebSocket ws = this.webSocket.get();
                     try {
@@ -104,9 +107,20 @@ public class WebSocketConnection implements AutoCloseable {
         }
     }
 
-    private void reconnectWebSocket(final WebSocket ws, final boolean throwExc) {
+    private void reconnectWebSocket(final WebSocket ws, final boolean initConnect) {
+        synchronized (this.limiter) {
+            this.limiter.await();
+            if (this.reconnectAndExchangeWebSocket(ws, initConnect)) {
+                this.limiter.reset();
+            } else {
+                this.limiter.increment();
+            }
+        }
+    }
+
+    private boolean reconnectAndExchangeWebSocket(final WebSocket ws, final boolean throwExc) {
         if (this.webSocket.get() != ws) {
-            return;
+            return true;
         }
         final WebSocket newWs;
         try {
@@ -115,14 +129,13 @@ public class WebSocketConnection implements AutoCloseable {
                 throw new WebSocketConnectionException("Socket connect failed.");
             }
         } catch (final Exception exception) {
-            final SdkException sdkExc = exception instanceof SdkException
-                    ? (SdkException) exception
-                    : new WebSocketConnectionException(exception);
+            final SdkException sdkException = exception instanceof SdkException sdkExc
+                    ? sdkExc : new WebSocketConnectionException(exception);
             if (throwExc) {
-                throw sdkExc;
+                throw sdkException;
             }
-            this.receiveQueue.add(new ExcWsOutputMessage(null, sdkExc));
-            return;
+            this.receiveQueue.add(new ExcWsOutputMessage(null, sdkException));
+            return false;
         }
         if (this.webSocket.compareAndSet(ws, newWs)) {
             if (ws != null) {
@@ -132,6 +145,7 @@ public class WebSocketConnection implements AutoCloseable {
         } else {
             newWs.close();
         }
+        return true;
     }
 
     private void onOpen(final WebSocket ws, final ServerHandshake serverHandshake) {
@@ -196,6 +210,33 @@ public class WebSocketConnection implements AutoCloseable {
         @Override
         public void onError(final Exception exception) {
             this.connection.onError(this, exception);
+        }
+    }
+
+    private static class ConnectLimiter {
+
+        private int failCount = 0;
+        private long lastIncrementTs = 0L;
+
+        public void await() {
+            if (this.failCount == 0) {
+                return;
+            }
+            final long maxSleep = 125L * ((long) Math.pow(2, this.failCount));
+            final long diffTs = System.currentTimeMillis() - this.lastIncrementTs;
+            final long remainingSleep = maxSleep - diffTs;
+            if (remainingSleep > 0) {
+                TimeUtils.sleep(remainingSleep);
+            }
+        }
+
+        public void reset() {
+            this.failCount = 0;
+        }
+
+        public void increment() {
+            this.failCount = Math.min(8, this.failCount + 1);
+            this.lastIncrementTs = System.currentTimeMillis();
         }
     }
 }

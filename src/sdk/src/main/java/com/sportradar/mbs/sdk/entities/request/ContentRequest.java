@@ -3,172 +3,117 @@ package com.sportradar.mbs.sdk.entities.request;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * Represents a request for content.
- * This class is used as a base class for different types of content requests.
- * It provides static methods to create instances of specific content request types.
- */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
+        @JsonSubTypes.Type(value = AccountInterventionInformRequest.class, name = "account-intervention-inform"),
+        @JsonSubTypes.Type(value = AccountLimitInformRequest.class, name = "account-limit-inform"),
+        @JsonSubTypes.Type(value = AccountLimitReachedInformRequest.class, name = "account-limit-reached-inform"),
+        @JsonSubTypes.Type(value = AccountStatusInformRequest.class, name = "account-status-inform"),
+        @JsonSubTypes.Type(value = BalanceChangeInformRequest.class, name = "balance-change-inform"),
         @JsonSubTypes.Type(value = CancelRequest.class, name = "cancel"),
-        @JsonSubTypes.Type(value = TicketInformRequest.class, name = "ticket-inform"),
-        @JsonSubTypes.Type(value = TicketRequest.class, name = "ticket"),
-        @JsonSubTypes.Type(value = CashoutAckRequest.class, name = "cashout-ack"),
-        @JsonSubTypes.Type(value = DepositInformRequest.class, name = "deposit-inform"),
+        @JsonSubTypes.Type(value = CancelAckRequest.class, name = "cancel-ack"),
         @JsonSubTypes.Type(value = CashoutRequest.class, name = "cashout"),
+        @JsonSubTypes.Type(value = CashoutAckRequest.class, name = "cashout-ack"),
+        @JsonSubTypes.Type(value = CashoutBuildRequest.class, name = "cashout-build"),
         @JsonSubTypes.Type(value = CashoutInformRequest.class, name = "cashout-inform"),
         @JsonSubTypes.Type(value = CasinoSessionsRequest.class, name = "casino-sessions-inform"),
-        @JsonSubTypes.Type(value = TicketAckRequest.class, name = "ticket-ack"),
+        @JsonSubTypes.Type(value = DepositInformRequest.class, name = "deposit-inform"),
         @JsonSubTypes.Type(value = ExtSettlementRequest.class, name = "ext-settlement"),
-        @JsonSubTypes.Type(value = CancelAckRequest.class, name = "cancel-ack"),
-        @JsonSubTypes.Type(value = WithdrawalInformRequest.class, name = "withdrawal-inform"),
         @JsonSubTypes.Type(value = ExtSettlementAckRequest.class, name = "ext-settlement-ack"),
-        @JsonSubTypes.Type(value = BalanceChangeInformRequest.class, name = "balance-change-inform"),
         @JsonSubTypes.Type(value = MaxStakeRequest.class, name = "max-stake"),
-        @JsonSubTypes.Type(value = AccountStatusInformRequest.class, name = "account-status-inform"),
-        @JsonSubTypes.Type(value = FinancialLimitInformRequest.class, name = "financial-limit-inform"),
-        @JsonSubTypes.Type(value = LimitReachedInformRequest.class, name = "limit-reached-inform"),
-        @JsonSubTypes.Type(value = SessionLimitInformRequest.class, name = "session-limit-inform"),
-        @JsonSubTypes.Type(value = InterventionInformRequest.class, name = "intervention-inform")
+        @JsonSubTypes.Type(value = TicketRequest.class, name = "ticket"),
+        @JsonSubTypes.Type(value = TicketAckRequest.class, name = "ticket-ack"),
+        @JsonSubTypes.Type(value = TicketBuildRequest.class, name = "ticket-build"),
+        @JsonSubTypes.Type(value = TicketInformRequest.class, name = "ticket-inform"),
+        @JsonSubTypes.Type(value = WithdrawalInformRequest.class, name = "withdrawal-inform")
 })
-public class ContentRequest {
+public abstract class ContentRequest {
 
-    /**
-     * Creates a new instance of the CancelRequest builder.
-     *
-     * @return The CancelRequest builder.
-     */
-    public static CancelRequest.Builder newCancelRequestBuilder() {
-        return CancelRequest.newBuilder();
+    public static AccountInterventionInformRequest.Builder newAccountInterventionInformRequestBuilder() {
+        return AccountInterventionInformRequest.newBuilder();
     }
 
-    /**
-     * Creates a new instance of the TicketInformRequest builder.
-     *
-     * @return The TicketInformRequest builder.
-     */
-    public static TicketInformRequest.Builder newTicketInformRequestBuilder() {
-        return TicketInformRequest.newBuilder();
+    public static AccountLimitInformRequest.Builder newAccountLimitInformRequestBuilder() {
+        return AccountLimitInformRequest.newBuilder();
     }
 
-    /**
-     * Creates a new instance of the TicketRequest builder.
-     *
-     * @return The TicketRequest builder.
-     */
-    public static TicketRequest.Builder newTicketRequestBuilder() {
-        return TicketRequest.newBuilder();
+    public static AccountLimitReachedInformRequest.Builder newAccountLimitReachedInformRequestBuilder() {
+        return AccountLimitReachedInformRequest.newBuilder();
     }
 
-    /**
-     * Creates a new instance of the CashoutAckRequest builder.
-     *
-     * @return The CashoutAckRequest builder.
-     */
-    public static CashoutAckRequest.Builder newCashoutAckRequestBuilder() {
-        return CashoutAckRequest.newBuilder();
+    public static AccountStatusInformRequest.Builder newAccountStatusInformRequestBuilder() {
+        return AccountStatusInformRequest.newBuilder();
     }
 
-    /**
-     * Creates a new instance of the DepositInformRequest builder.
-     *
-     * @return The DepositInformRequest builder.
-     */
-    public static DepositInformRequest.Builder newDepositInformRequestBuilder() {
-        return DepositInformRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the CashoutRequest builder.
-     *
-     * @return The CashoutRequest builder.
-     */
-    public static CashoutRequest.Builder newCashoutRequestBuilder() {
-        return CashoutRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the {@link CashoutInformRequest.Builder}.
-     *
-     * @return The CashoutInformRequest builder.
-     */
-    public static CashoutInformRequest.Builder newCashoutInformRequestBuilder() {
-        return CashoutInformRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the CasinoSessionsRequest builder.
-     *
-     * @return The CasinoSessionsRequest builder.
-     */
-    public static CasinoSessionsRequest.Builder newCasinoSessionsRequestBuilder() {
-        return CasinoSessionsRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the TicketAckRequest builder.
-     *
-     * @return The TicketAckRequest builder.
-     */
-    public static TicketAckRequest.Builder newTicketAckRequestBuilder() {
-        return TicketAckRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the ExtSettlementRequest builder.
-     *
-     * @return The ExtSettlementRequest builder.
-     */
-    public static ExtSettlementRequest.Builder newExtSettlementRequestBuilder() {
-        return ExtSettlementRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the CancelAckRequest builder.
-     *
-     * @return The CancelAckRequest builder.
-     */
-    public static CancelAckRequest.Builder newCancelAckRequestBuilder() {
-        return CancelAckRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the WithdrawalInformRequest builder.
-     *
-     * @return The WithdrawalInformRequest builder.
-     */
-    public static WithdrawalInformRequest.Builder newWithdrawalInformRequestBuilder() {
-        return WithdrawalInformRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the ExtSettlementAckRequest builder.
-     *
-     * @return The ExtSettlementAckRequest builder.
-     */
-    public static ExtSettlementAckRequest.Builder newExtSettlementAckRequestBuilder() {
-        return ExtSettlementAckRequest.newBuilder();
-    }
-
-    /**
-     * Creates a new instance of the BalanceChangeInformRequest builder.
-     *
-     * @return The BalanceChangeInformRequest builder.
-     */
     public static BalanceChangeInformRequest.Builder newBalanceChangeInformRequestBuilder() {
         return BalanceChangeInformRequest.newBuilder();
     }
 
-    /**
-     * Creates a new instance of the MaxStakeRequest builder.
-     *
-     * @return The MaxStakeRequest builder.
-     */
+    public static CancelRequest.Builder newCancelRequestBuilder() {
+        return CancelRequest.newBuilder();
+    }
+
+    public static CancelAckRequest.Builder newCancelAckRequestBuilder() {
+        return CancelAckRequest.newBuilder();
+    }
+
+    public static CashoutRequest.Builder newCashoutRequestBuilder() {
+        return CashoutRequest.newBuilder();
+    }
+
+    public static CashoutAckRequest.Builder newCashoutAckRequestBuilder() {
+        return CashoutAckRequest.newBuilder();
+    }
+
+    public static CashoutBuildRequest.Builder newCashoutBuildRequestBuilder() {
+        return CashoutBuildRequest.newBuilder();
+    }
+
+    public static CashoutInformRequest.Builder newCashoutInformRequestBuilder() {
+        return CashoutInformRequest.newBuilder();
+    }
+
+    public static CasinoSessionsRequest.Builder newCasinoSessionsRequestBuilder() {
+        return CasinoSessionsRequest.newBuilder();
+    }
+
+    public static DepositInformRequest.Builder newDepositInformRequestBuilder() {
+        return DepositInformRequest.newBuilder();
+    }
+
+    public static ExtSettlementRequest.Builder newExtSettlementRequestBuilder() {
+        return ExtSettlementRequest.newBuilder();
+    }
+
+    public static ExtSettlementAckRequest.Builder newExtSettlementAckRequestBuilder() {
+        return ExtSettlementAckRequest.newBuilder();
+    }
+
     public static MaxStakeRequest.Builder newMaxStakeRequestBuilder() {
         return MaxStakeRequest.newBuilder();
+    }
+
+    public static TicketRequest.Builder newTicketRequestBuilder() {
+        return TicketRequest.newBuilder();
+    }
+
+    public static TicketAckRequest.Builder newTicketAckRequestBuilder() {
+        return TicketAckRequest.newBuilder();
+    }
+
+    public static TicketBuildRequest.Builder newTicketBuildRequestBuilder() {
+        return TicketBuildRequest.newBuilder();
+    }
+
+    public static TicketInformRequest.Builder newTicketInformRequestBuilder() {
+        return TicketInformRequest.newBuilder();
+    }
+
+    public static WithdrawalInformRequest.Builder newWithdrawalInformRequestBuilder() {
+        return WithdrawalInformRequest.newBuilder();
     }
 
 }

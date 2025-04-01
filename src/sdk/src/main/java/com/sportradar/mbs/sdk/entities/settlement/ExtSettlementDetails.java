@@ -3,9 +3,6 @@ package com.sportradar.mbs.sdk.entities.settlement;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * Represents the external settlement details for a settlement.
- */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -14,23 +11,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = BetExtSettlementDetails.class, name = "bet"),
         @JsonSubTypes.Type(value = TicketExtSettlementDetails.class, name = "ticket")
 })
-public class ExtSettlementDetails {
+public abstract class ExtSettlementDetails {
 
-    /**
-     * Creates a new instance of BetExtSettlementDetails.Builder.
-     *
-     * @return the new instance of BetExtSettlementDetails.Builder
-     */
     public static BetExtSettlementDetails.Builder newBetExtSettlementDetailsBuilder() {
         return BetExtSettlementDetails.newBuilder();
     }
 
-    /**
-     * Creates a new instance of TicketExtSettlementDetails.Builder.
-     *
-     * @return the new instance of TicketExtSettlementDetails.Builder
-     */
     public static TicketExtSettlementDetails.Builder newTicketExtSettlementDetailsBuilder() {
         return TicketExtSettlementDetails.newBuilder();
     }
+
 }

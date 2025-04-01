@@ -7,28 +7,26 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum LimitType {
-    DEPOSIT("deposit"),
-    SESSION("session"),
-    LOSS("loss"),
-    STAKE("stake");
+public enum AccountStatusChangeDuration {
+    TEMPORARY("temporary"),
+    PERMANENT("permanent");
 
-    private static final Map<String, LimitType> VALUES = new HashMap<>();
+    private static final Map<String, AccountStatusChangeDuration> VALUES = new HashMap();
 
     static {
-        for (final LimitType val : EnumSet.allOf(LimitType.class)) {
+        for (final AccountStatusChangeDuration val : EnumSet.allOf(AccountStatusChangeDuration.class)) {
             VALUES.put(val.jsonVal, val);
         }
     }
 
     private final String jsonVal;
 
-    LimitType(final String jsonVal) {
+    AccountStatusChangeDuration(final String jsonVal) {
         this.jsonVal = jsonVal;
     }
 
     @JsonCreator
-    public static LimitType fromValue(final String value) {
+    public static AccountStatusChangeDuration fromValue(final String value) {
         return value == null ? null : VALUES.get(value);
     }
 

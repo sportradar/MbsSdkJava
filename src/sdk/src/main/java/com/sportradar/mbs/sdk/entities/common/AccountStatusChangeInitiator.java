@@ -7,27 +7,28 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum StatusValue {
-    DISABLED("disabled"),
-    EXCLUDED("excluded"),
-    ACTIVE("active");
+public enum AccountStatusChangeInitiator {
+    OPERATOR("operator"),
+    OTHER("other"),
+    PLAYER("player"),
+    REGULATOR("regulator");
 
-    private static final Map<String, StatusValue> VALUES = new HashMap<>();
+    private static final Map<String, AccountStatusChangeInitiator> VALUES = new HashMap();
 
     static {
-        for (final StatusValue val : EnumSet.allOf(StatusValue.class)) {
+        for (final AccountStatusChangeInitiator val : EnumSet.allOf(AccountStatusChangeInitiator.class)) {
             VALUES.put(val.jsonVal, val);
         }
     }
 
     private final String jsonVal;
 
-    StatusValue(final String jsonVal) {
+    AccountStatusChangeInitiator(final String jsonVal) {
         this.jsonVal = jsonVal;
     }
 
     @JsonCreator
-    public static StatusValue fromValue(final String value) {
+    public static AccountStatusChangeInitiator fromValue(final String value) {
         return value == null ? null : VALUES.get(value);
     }
 

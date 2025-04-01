@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum BalanceChangeStatus {
-    INVALID("invalid"),
-    VALID("valid");
+    VALID("valid"),
+    INVALID("invalid");
 
     private static final Map<String, BalanceChangeStatus> VALUES = new HashMap();
 

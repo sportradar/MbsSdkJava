@@ -2,40 +2,22 @@ package com.sportradar.mbs.sdk.entities.odds;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
-/**
- * Represents moneyline (american) odds.
- */
 public class MoneylineOdds extends Odds {
 
     @JsonProperty("value")
-    private BigInteger value;
+    private BigDecimal value;
 
-    /**
-     * Creates a new instance of the MoneylineOdds.Builder class.
-     *
-     * @return A new instance of the MoneylineOdds.Builder class.
-     */
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    /**
-     * Gets the value of the moneyline odds.
-     *
-     * @return The value of the moneyline odds.
-     */
-    public BigInteger getValue() {
+    public BigDecimal getValue() {
         return this.value;
     }
 
-    /**
-     * Sets the value of the moneyline odds.
-     *
-     * @param value The value of the moneyline odds.
-     */
-    public void setValue(BigInteger value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
@@ -46,22 +28,11 @@ public class MoneylineOdds extends Odds {
         private Builder() {
         }
 
-        /**
-         * Builds and returns the MoneylineOdds instance.
-         *
-         * @return The built MoneylineOdds instance.
-         */
         public MoneylineOdds build() {
             return this.instance;
         }
 
-        /**
-         * Sets the value of the moneyline odds.
-         *
-         * @param value The value of the moneyline odds.
-         * @return The MoneylineOdds.Builder instance.
-         */
-        public Builder setValue(BigInteger value) {
+        public Builder setValue(BigDecimal value) {
             this.instance.setValue(value);
             return this;
         }

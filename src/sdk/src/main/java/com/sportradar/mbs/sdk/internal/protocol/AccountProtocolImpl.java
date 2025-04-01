@@ -1,7 +1,13 @@
 package com.sportradar.mbs.sdk.internal.protocol;
 
-import com.sportradar.mbs.sdk.entities.request.*;
-import com.sportradar.mbs.sdk.entities.response.*;
+import com.sportradar.mbs.sdk.entities.request.AccountInterventionInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountLimitInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountLimitReachedInformRequest;
+import com.sportradar.mbs.sdk.entities.request.AccountStatusInformRequest;
+import com.sportradar.mbs.sdk.entities.response.AccountInterventionInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountLimitInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountLimitReachedInformResponse;
+import com.sportradar.mbs.sdk.entities.response.AccountStatusInformResponse;
 import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,53 +32,51 @@ public class AccountProtocolImpl implements AccountProtocol {
         this.engine = engine;
     }
 
-
     /**
-     * Sends an asynchronous request to retrieve account status information.
+     * Sends an account status inform request asynchronously.
      *
-     * @param request The request object containing account status details.
-     * @return A {@code CompletableFuture} representing the account status response.
+     * @param request The request object containing account details.
+     * @return A CompletableFuture representing the account status response.
      */
     @Override
-    public CompletableFuture<AccountStatusInformResponse> sendAccountStatusAsync(final AccountStatusInformRequest request) {
+    public CompletableFuture<AccountStatusInformResponse> sendStatusInformAsync(
+            AccountStatusInformRequest request) {
         return engine.execute("account-status-inform", request, AccountStatusInformResponse.class);
     }
 
     /**
-     * Sends an asynchronous request to inform about a financial limit.
+     * Sends a limit inform request asynchronously.
      *
-     * @param request The request object containing financial limit details.
-     * @return A {@code CompletableFuture} representing the financial limit inform response.
+     * @param request The request object containing limit details.
+     * @return A CompletableFuture representing the limit inform response.
      */
     @Override
-    public CompletableFuture<FinancialLimitInformResponse> sendFinancialLimitInformAsync(final FinancialLimitInformRequest request) {
-        return engine.execute("financial-limit-inform", request, FinancialLimitInformResponse.class);
+    public CompletableFuture<AccountLimitInformResponse> sendLimitInformAsync(
+            AccountLimitInformRequest request) {
+        return engine.execute("account-limit-inform", request, AccountLimitInformResponse.class);
     }
 
     /**
-     * Sends an asynchronous request to inform that a limit has been reached.
+     * Sends a limit reached inform request asynchronously.
      *
      * @param request The request object indicating a limit has been reached.
-     * @return A {@code CompletableFuture} representing the limit reached inform response.
+     * @return A CompletableFuture representing the limit reached inform response.
      */
     @Override
-    public CompletableFuture<LimitReachedInformResponse> sendLimitReachedInformAsync(final LimitReachedInformRequest request) {
-        return engine.execute("limit-reached-inform", request, LimitReachedInformResponse.class);
+    public CompletableFuture<AccountLimitReachedInformResponse> sendLimitReachedInformAsync(
+            AccountLimitReachedInformRequest request) {
+        return engine.execute("account-limit-reached-inform", request, AccountLimitReachedInformResponse.class);
     }
 
     /**
-     * Sends an asynchronous request to inform about a session limit.
+     * Sends an intervention inform request asynchronously.
      *
-     * @param request The request object containing session limit details.
-     * @return A {@code CompletableFuture} representing the session limit inform response.
+     * @param request The request object containing intervention details.
+     * @return A CompletableFuture representing the intervention inform response.
      */
     @Override
-    public CompletableFuture<SessionLimitInformResponse> sendSessionLimitInformAsync(final SessionLimitInformRequest request) {
-        return engine.execute("session-limit-inform", request, SessionLimitInformResponse.class);
-    }
-
-    @Override
-    public CompletableFuture<InterventionInformResponse> InterventionInformAsync(InterventionInformRequest request) {
-        return engine.execute("intervention-inform", request, InterventionInformResponse.class);
+    public CompletableFuture<AccountInterventionInformResponse> sendInterventionInformAsync(
+            AccountInterventionInformRequest request) {
+        return engine.execute("account-intervention-inform", request, AccountInterventionInformResponse.class);
     }
 }

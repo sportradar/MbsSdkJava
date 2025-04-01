@@ -49,6 +49,7 @@ public class Awaiter<R extends ContentResponse> {
     }
 
     public void completeWithException(final SdkException sdkException) {
+        this.sendWsInputMessage.suppressSend();
         this.future.completeExceptionally(sdkException);
     }
 
@@ -56,6 +57,6 @@ public class Awaiter<R extends ContentResponse> {
         if (this.future.isDone()) {
             return;
         }
-        this.future.completeExceptionally(new SdkNotConnectedException());
+        completeWithException(new SdkNotConnectedException());
     }
 }

@@ -7,26 +7,30 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum StatusDuration {
-    TEMPORARY("temporary"),
-    PERMANENT("permanent");
+public enum InterventionMethod {
+    POPUP("pop-up"),
+    CARE_CALL("care-call"),
+    RG_MESSAGING("rg-messaging"),
+    EMAIL("email"),
+    OTHER("other"),
+    LIMIT_UPDATE("limits-update");
 
-    private static final Map<String, StatusDuration> VALUES = new HashMap<>();
+    private static final Map<String, InterventionMethod> VALUES = new HashMap();
 
     static {
-        for (final StatusDuration val : EnumSet.allOf(StatusDuration.class)) {
+        for (final InterventionMethod val : EnumSet.allOf(InterventionMethod.class)) {
             VALUES.put(val.jsonVal, val);
         }
     }
 
     private final String jsonVal;
 
-    StatusDuration(final String jsonVal) {
+    InterventionMethod(final String jsonVal) {
         this.jsonVal = jsonVal;
     }
 
     @JsonCreator
-    public static StatusDuration fromValue(final String value) {
+    public static InterventionMethod fromValue(final String value) {
         return value == null ? null : VALUES.get(value);
     }
 
