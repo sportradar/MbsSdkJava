@@ -5,13 +5,14 @@ import com.sportradar.mbs.sdk.exceptions.SdkNotConnectedException;
 import com.sportradar.mbs.sdk.internal.protocol.ProtocolProvider;
 import com.sportradar.mbs.sdk.internal.utils.ExcSuppress;
 import com.sportradar.mbs.sdk.protocol.AccountProtocol;
+import com.sportradar.mbs.sdk.protocol.BalanceProtocol;
 import com.sportradar.mbs.sdk.protocol.TicketProtocol;
 
 import java.util.function.BiConsumer;
 
 /**
- * The MbsSdk class represents the main entry point for interacting with the MBS SDK.
- * It provides methods for connecting to the MBS server, retrieving the ticket protocol, and closing the SDK.
+ * The MbsSdk class represents the main entry point for interacting with the MBS SDK. It provides methods for connecting
+ * to the MBS server, retrieving the ticket protocol, and closing the SDK.
  */
 public class MbsSdk implements AutoCloseable {
 
@@ -52,8 +53,16 @@ public class MbsSdk implements AutoCloseable {
     }
 
     /**
-     * Connects the SDK to the MBS server.
-     * If the SDK is already connected, this method does nothing.
+     * Gets the balance protocol for interacting with the MBS server.
+     *
+     * @return The balance protocol.
+     */
+    public BalanceProtocol getBalanceProtocol() {
+        return this.protocolProvider.getBalanceProtocol();
+    }
+
+    /**
+     * Connects the SDK to the MBS server. If the SDK is already connected, this method does nothing.
      *
      * @throws SdkException If an error occurs during the connection process.
      */
@@ -73,8 +82,8 @@ public class MbsSdk implements AutoCloseable {
     }
 
     /**
-     * Closes the SDK and releases any resources associated with it.
-     * If the SDK is already closed, this method does nothing.
+     * Closes the SDK and releases any resources associated with it. If the SDK is already closed, this method does
+     * nothing.
      */
     @Override
     public void close() {
