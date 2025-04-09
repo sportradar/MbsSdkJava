@@ -216,17 +216,21 @@ public class WebSocketConnection implements AutoCloseable {
     private static class ConnectLimiter {
 
         private int failCount = 0;
-        private long lastIncrementTs = 0L;
+        private long lastAttemptTs = 0L;
 
         public void await() {
-            if (this.failCount == 0) {
-                return;
-            }
-            final long maxSleep = 125L * ((long) Math.pow(2, this.failCount));
-            final long diffTs = System.currentTimeMillis() - this.lastIncrementTs;
-            final long remainingSleep = maxSleep - diffTs;
-            if (remainingSleep > 0) {
-                TimeUtils.sleep(remainingSleep);
+            try {
+                if (this.failCount == 0) {
+                    return;
+                }
+                final long maxSleep = 125L * ((long) Math.pow(2, this.failCount));
+                final long diffTs = System.currentTimeMillis() - this.lastAttemptTs;
+                final long remainingSleep = maxSleep - diffTs;
+                if (remainingSleep > 0) {
+                    TimeUtils.sleep(remainingSleep);
+                }
+            } finally {
+                this.lastAttemptTs = System.currentTimeMillis();
             }
         }
 
@@ -236,7 +240,6 @@ public class WebSocketConnection implements AutoCloseable {
 
         public void increment() {
             this.failCount = Math.min(8, this.failCount + 1);
-            this.lastIncrementTs = System.currentTimeMillis();
         }
     }
 }
