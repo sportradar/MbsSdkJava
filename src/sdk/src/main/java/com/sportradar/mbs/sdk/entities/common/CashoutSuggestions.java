@@ -1,44 +1,33 @@
 package com.sportradar.mbs.sdk.entities.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sportradar.mbs.sdk.entities.payout.Payout;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 public class CashoutSuggestions {
 
     @JsonProperty("fairCashout")
-    private BigDecimal fairCashout;
-    @JsonProperty("simpleCashout")
-    private BigDecimal simpleCashout;
+    private Payout[] fairCashout;
     @JsonProperty("cashoutId")
     private String cashoutId;
     @JsonProperty("cashoutType")
     private String cashoutType;
-    @JsonProperty("maxWinCurrent")
-    private BigDecimal maxWinCurrent;
-    @JsonProperty("partialCashout")
-    private BigDecimal partialCashout;
-    @JsonProperty("currency")
-    private String currency;
+    @JsonProperty("maxPayout")
+    private Payout[] maxPayout;
+    @JsonProperty("cashout")
+    private Payout[] cashout;
 
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    public BigDecimal getFairCashout() {
+    public Payout[] getFairCashout() {
         return this.fairCashout;
     }
 
-    public void setFairCashout(BigDecimal value) {
+    public void setFairCashout(Payout[] value) {
         this.fairCashout = value;
-    }
-
-    public BigDecimal getSimpleCashout() {
-        return this.simpleCashout;
-    }
-
-    public void setSimpleCashout(BigDecimal value) {
-        this.simpleCashout = value;
     }
 
     public String getCashoutId() {
@@ -57,28 +46,20 @@ public class CashoutSuggestions {
         this.cashoutType = value;
     }
 
-    public BigDecimal getMaxWinCurrent() {
-        return this.maxWinCurrent;
+    public Payout[] getMaxPayout() {
+        return this.maxPayout;
     }
 
-    public void setMaxWinCurrent(BigDecimal value) {
-        this.maxWinCurrent = value;
+    public void setMaxPayout(Payout[] value) {
+        this.maxPayout = value;
     }
 
-    public BigDecimal getPartialCashout() {
-        return this.partialCashout;
+    public Payout[] getCashout() {
+        return this.cashout;
     }
 
-    public void setPartialCashout(BigDecimal value) {
-        this.partialCashout = value;
-    }
-
-    public String getCurrency() {
-        return this.currency;
-    }
-
-    public void setCurrency(String value) {
-        this.currency = value;
+    public void setCashout(Payout[] value) {
+        this.cashout = value;
     }
 
     public static class Builder {
@@ -92,14 +73,14 @@ public class CashoutSuggestions {
             return this.instance;
         }
 
-        public Builder setFairCashout(BigDecimal value) {
+        public Builder setFairCashout(Payout... value) {
             this.instance.setFairCashout(value);
             return this;
         }
 
-        public Builder setSimpleCashout(BigDecimal value) {
-            this.instance.setSimpleCashout(value);
-            return this;
+        public Builder setFairCashout(List<? extends Payout> value) {
+            Payout[] arr = value == null ? null : value.toArray(new Payout[0]);
+            return this.setFairCashout(arr);
         }
 
         public Builder setCashoutId(String value) {
@@ -112,19 +93,24 @@ public class CashoutSuggestions {
             return this;
         }
 
-        public Builder setMaxWinCurrent(BigDecimal value) {
-            this.instance.setMaxWinCurrent(value);
+        public Builder setMaxPayout(Payout... value) {
+            this.instance.setMaxPayout(value);
             return this;
         }
 
-        public Builder setPartialCashout(BigDecimal value) {
-            this.instance.setPartialCashout(value);
+        public Builder setMaxPayout(List<? extends Payout> value) {
+            Payout[] arr = value == null ? null : value.toArray(new Payout[0]);
+            return this.setMaxPayout(arr);
+        }
+
+        public Builder setCashout(Payout... value) {
+            this.instance.setCashout(value);
             return this;
         }
 
-        public Builder setCurrency(String value) {
-            this.instance.setCurrency(value);
-            return this;
+        public Builder setCashout(List<? extends Payout> value) {
+            Payout[] arr = value == null ? null : value.toArray(new Payout[0]);
+            return this.setCashout(arr);
         }
     }
 }

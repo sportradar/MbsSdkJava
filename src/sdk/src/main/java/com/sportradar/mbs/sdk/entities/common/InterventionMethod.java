@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum InterventionMethod {
-    POPUP("pop-up"),
+    OTHER("other"),
+    LIMIT_UPDATE("limits-update"),
+    EMAIL("email"),
     CARE_CALL("care-call"),
     RG_MESSAGING("rg-messaging"),
-    EMAIL("email"),
-    OTHER("other"),
-    LIMIT_UPDATE("limits-update");
+    POPUP("pop-up");
 
     private static final Map<String, InterventionMethod> VALUES = new HashMap();
 

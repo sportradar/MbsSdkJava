@@ -12,6 +12,8 @@ public class FreePayout extends Payout {
     private BigDecimal amount;
     @JsonProperty("currency")
     private String currency;
+    @JsonProperty("source")
+    private PayoutSourceType source;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -41,6 +43,14 @@ public class FreePayout extends Payout {
         this.currency = value;
     }
 
+    public PayoutSourceType getSource() {
+        return this.source;
+    }
+
+    public void setSource(PayoutSourceType value) {
+        this.source = value;
+    }
+
     public static class Builder {
 
         private final FreePayout instance = new FreePayout();
@@ -64,6 +74,11 @@ public class FreePayout extends Payout {
 
         public Builder setCurrency(String value) {
             this.instance.setCurrency(value);
+            return this;
+        }
+
+        public Builder setSource(PayoutSourceType value) {
+            this.instance.setSource(value);
             return this;
         }
     }
