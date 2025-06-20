@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = CashoutAckResponse.class, name = "cashout-ack-reply"),
         @JsonSubTypes.Type(value = CashoutBuildResponse.class, name = "cashout-build-reply"),
         @JsonSubTypes.Type(value = CashoutInformResponse.class, name = "cashout-inform-reply"),
+        @JsonSubTypes.Type(value = CashoutPlacementResponse.class, name = "cashout-placement-reply"),
         @JsonSubTypes.Type(value = CashoutResponse.class, name = "cashout-reply"),
         @JsonSubTypes.Type(value = CasinoSessionsResponse.class, name = "casino-sessions-inform-reply"),
         @JsonSubTypes.Type(value = DepositInformResponse.class, name = "deposit-inform-reply"),
@@ -71,6 +72,10 @@ public abstract class ContentResponse {
 
     public static CashoutInformResponse.Builder newCashoutInformResponseBuilder() {
         return CashoutInformResponse.newBuilder();
+    }
+
+    public static CashoutPlacementResponse.Builder newCashoutPlacementResponseBuilder() {
+        return CashoutPlacementResponse.newBuilder();
     }
 
     public static CashoutResponse.Builder newCashoutResponseBuilder() {
