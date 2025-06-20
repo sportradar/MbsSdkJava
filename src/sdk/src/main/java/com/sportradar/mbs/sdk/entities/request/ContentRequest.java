@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = CashoutAckRequest.class, name = "cashout-ack"),
         @JsonSubTypes.Type(value = CashoutBuildRequest.class, name = "cashout-build"),
         @JsonSubTypes.Type(value = CashoutInformRequest.class, name = "cashout-inform"),
+        @JsonSubTypes.Type(value = CashoutPlacementRequest.class, name = "cashout-placement"),
         @JsonSubTypes.Type(value = CasinoSessionsRequest.class, name = "casino-sessions-inform"),
         @JsonSubTypes.Type(value = DepositInformRequest.class, name = "deposit-inform"),
         @JsonSubTypes.Type(value = ExtSettlementRequest.class, name = "ext-settlement"),
@@ -74,6 +75,10 @@ public abstract class ContentRequest {
 
     public static CashoutInformRequest.Builder newCashoutInformRequestBuilder() {
         return CashoutInformRequest.newBuilder();
+    }
+
+    public static CashoutPlacementRequest.Builder newCashoutPlacementRequestBuilder() {
+        return CashoutPlacementRequest.newBuilder();
     }
 
     public static CasinoSessionsRequest.Builder newCasinoSessionsRequestBuilder() {

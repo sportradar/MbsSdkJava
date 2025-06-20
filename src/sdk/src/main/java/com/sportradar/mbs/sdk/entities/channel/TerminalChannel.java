@@ -1,9 +1,12 @@
 package com.sportradar.mbs.sdk.entities.channel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sportradar.mbs.sdk.entities.location.Location;
 
 public class TerminalChannel extends Channel {
 
+    @JsonProperty("location")
+    private Location location;
     @JsonProperty("terminalId")
     private String terminalId;
     @JsonProperty("shopId")
@@ -13,6 +16,14 @@ public class TerminalChannel extends Channel {
 
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    public Location getLocation() {
+        return this.location;
+    }
+
+    public void setLocation(Location value) {
+        this.location = value;
     }
 
     public String getTerminalId() {
@@ -48,6 +59,11 @@ public class TerminalChannel extends Channel {
 
         public TerminalChannel build() {
             return this.instance;
+        }
+
+        public Builder setLocation(Location value) {
+            this.instance.setLocation(value);
+            return this;
         }
 
         public Builder setTerminalId(String value) {
