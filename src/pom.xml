@@ -5,7 +5,7 @@
     <groupId>com.sportradar.mbs.sdk</groupId>
     <artifactId>mbs-sdk-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.7</version>
+    <version>0.9.7-SNAPSHOT</version>
     <name>MBS SDK Parent</name>
     <description>MBS SDK is a client library that enables easier integration with the Sportradar MBS</description>
     <inceptionYear>2024</inceptionYear>
@@ -34,7 +34,7 @@
     <scm>
         <url>https://github.com/sportradar/MbsSdkJava</url>
         <connection>scm:git:git@github.com:sportradar/MbsSdkJava.git</connection>
-    <tag>v0.9.7</tag>
+    <tag>v0.9.6</tag>
   </scm>
 
     <modules>
