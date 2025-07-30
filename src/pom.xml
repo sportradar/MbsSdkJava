@@ -69,7 +69,7 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>mbs.ossrh</releaseProfiles>
+                    <releaseProfiles>mbs.central</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
@@ -91,18 +91,17 @@
 
     <profiles>
         <profile>
-            <id>mbs.ossrh</id>
+            <id>mbs.central</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <excludeArtifacts>mts-sdk-external-example,distribution</excludeArtifacts>
                         </configuration>
                     </plugin>
                     <plugin>
