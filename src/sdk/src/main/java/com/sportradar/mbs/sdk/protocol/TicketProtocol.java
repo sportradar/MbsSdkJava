@@ -169,6 +169,19 @@ public interface TicketProtocol {
     }
 
     /**
+     * Sends a cashout placement request synchronously and returns the corresponding response.
+     *
+     * @param request the cashout placement request to be sent
+     * @return the cashout placement response received
+     * @throws ExecutionException   if the execution of the request encounters an exception wrapping the cause exception
+     * @throws InterruptedException if the execution of the request is interrupted
+     */
+    default CashoutPlacementResponse sendCashoutPlacement(CashoutPlacementRequest request)
+            throws ExecutionException, InterruptedException {
+        return this.sendCashoutPlacementAsync(request).get();
+    }
+
+    /**
      * Sends a ticket request asynchronously and returns a CompletableFuture representing the response.
      *
      * @param request the ticket request to be sent
@@ -263,4 +276,12 @@ public interface TicketProtocol {
      * @return a CompletableFuture representing the max stake response
      */
     CompletableFuture<MaxStakeResponse> sendMaxStakeAsync(MaxStakeRequest request);
+
+    /**
+     * Sends a cashout placement request asynchronously and returns a CompletableFuture representing the response.
+     *
+     * @param request the cashout placement request to be sent
+     * @return a CompletableFuture representing the cashout placement response
+     */
+    CompletableFuture<CashoutPlacementResponse> sendCashoutPlacementAsync(CashoutPlacementRequest request) throws ExecutionException, InterruptedException;
 }
