@@ -6,6 +6,7 @@ import com.sportradar.mbs.sdk.internal.protocol.ProtocolProvider;
 import com.sportradar.mbs.sdk.internal.utils.ExcSuppress;
 import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 import com.sportradar.mbs.sdk.protocol.BalanceProtocol;
+import com.sportradar.mbs.sdk.protocol.GamingProtocol;
 import com.sportradar.mbs.sdk.protocol.TicketProtocol;
 
 import java.util.function.BiConsumer;
@@ -59,6 +60,14 @@ public class MbsSdk implements AutoCloseable {
      */
     public BalanceProtocol getBalanceProtocol() {
         return this.protocolProvider.getBalanceProtocol();
+    }
+
+    /**
+     * Gets the gaming protocol for interacting with the MBS server.
+     * @return The gaming protocol.
+     */
+    public GamingProtocol getGamingProtocol() {
+        return this.protocolProvider.getGamingProtocol();
     }
 
     /**

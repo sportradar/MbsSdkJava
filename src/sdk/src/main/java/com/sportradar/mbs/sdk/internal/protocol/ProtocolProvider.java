@@ -5,6 +5,7 @@ import com.sportradar.mbs.sdk.internal.config.ImmutableConfig;
 import com.sportradar.mbs.sdk.internal.utils.ExcSuppress;
 import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 import com.sportradar.mbs.sdk.protocol.BalanceProtocol;
+import com.sportradar.mbs.sdk.protocol.GamingProtocol;
 import com.sportradar.mbs.sdk.protocol.TicketProtocol;
 
 import java.util.function.Consumer;
@@ -15,6 +16,7 @@ public class ProtocolProvider implements AutoCloseable {
     private final TicketProtocol ticketProtocol;
     private final AccountProtocol accountProtocol;
     private final BalanceProtocol balanceProtocol;
+    private final GamingProtocol gamingProtocol;
 
     public ProtocolProvider(final MbsSdkConfig sdkConfig, final Consumer<Exception> unhandledExceptionHandler) {
         final ImmutableConfig config = new ImmutableConfig(sdkConfig);
@@ -22,6 +24,7 @@ public class ProtocolProvider implements AutoCloseable {
         this.ticketProtocol = new TicketProtocolImpl(this.engine);
         this.accountProtocol = new AccountProtocolImpl(this.engine);
         this.balanceProtocol = new BalanceProtocolImpl(this.engine);
+        this.gamingProtocol = new GamingProtocolImpl(this.engine);
     }
 
     public TicketProtocol getTicketProtocol() {
@@ -34,6 +37,10 @@ public class ProtocolProvider implements AutoCloseable {
 
     public BalanceProtocol getBalanceProtocol() {
         return balanceProtocol;
+    }
+
+    public GamingProtocol getGamingProtocol() {
+        return gamingProtocol;
     }
 
     public void connect() {
