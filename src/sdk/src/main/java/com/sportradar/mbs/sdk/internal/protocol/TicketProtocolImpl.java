@@ -73,4 +73,9 @@ class TicketProtocolImpl implements TicketProtocol {
     public CompletableFuture<MaxStakeResponse> sendMaxStakeAsync(MaxStakeRequest request) {
         return engine.execute("max-stake", request, MaxStakeResponse.class);
     }
+
+    @Override
+    public CompletableFuture<CashoutPlacementResponse> sendCashoutPlacementAsync(CashoutPlacementRequest request) {
+        return engine.execute("cashout-stake", request, CashoutPlacementResponse.class);
+    }
 }
