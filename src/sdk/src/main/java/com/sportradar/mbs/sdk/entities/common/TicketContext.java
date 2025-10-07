@@ -13,6 +13,8 @@ public class TicketContext {
     private String walletId;
     @JsonProperty("ref")
     private TicketRef ref;
+    @JsonProperty("rates")
+    private ExchangeRate[] rates;
     @JsonProperty("channel")
     private Channel channel;
     @JsonProperty("limitId")
@@ -40,6 +42,14 @@ public class TicketContext {
 
     public void setRef(TicketRef value) {
         this.ref = value;
+    }
+
+    public ExchangeRate[] getRates() {
+        return this.rates;
+    }
+
+    public void setRates(ExchangeRate[] value) {
+        this.rates = value;
     }
 
     public Channel getChannel() {
@@ -93,6 +103,16 @@ public class TicketContext {
         public Builder setRef(TicketRef value) {
             this.instance.setRef(value);
             return this;
+        }
+
+        public Builder setRates(ExchangeRate... value) {
+            this.instance.setRates(value);
+            return this;
+        }
+
+        public Builder setRates(List<? extends ExchangeRate> value) {
+            ExchangeRate[] arr = value == null ? null : value.toArray(new ExchangeRate[0]);
+            return this.setRates(arr);
         }
 
         public Builder setChannel(Channel value) {

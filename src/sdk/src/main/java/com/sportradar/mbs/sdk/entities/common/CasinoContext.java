@@ -3,10 +3,14 @@ package com.sportradar.mbs.sdk.entities.common;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sportradar.mbs.sdk.entities.channel.Channel;
 
+import java.util.List;
+
 public class CasinoContext {
 
     @JsonProperty("walletId")
     private String walletId;
+    @JsonProperty("rates")
+    private ExchangeRate[] rates;
     @JsonProperty("channel")
     private Channel channel;
     @JsonProperty("endCustomer")
@@ -22,6 +26,14 @@ public class CasinoContext {
 
     public void setWalletId(String value) {
         this.walletId = value;
+    }
+
+    public ExchangeRate[] getRates() {
+        return this.rates;
+    }
+
+    public void setRates(ExchangeRate[] value) {
+        this.rates = value;
     }
 
     public Channel getChannel() {
@@ -54,6 +66,16 @@ public class CasinoContext {
         public Builder setWalletId(String value) {
             this.instance.setWalletId(value);
             return this;
+        }
+
+        public Builder setRates(ExchangeRate... value) {
+            this.instance.setRates(value);
+            return this;
+        }
+
+        public Builder setRates(List<? extends ExchangeRate> value) {
+            ExchangeRate[] arr = value == null ? null : value.toArray(new ExchangeRate[0]);
+            return this.setRates(arr);
         }
 
         public Builder setChannel(Channel value) {

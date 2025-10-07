@@ -1,0 +1,629 @@
+commit 24c78c52067de6e72a60c994c8c2d03bfd8902df
+Author: Primoz Erjavec <p.erjavec@sportradar.com>
+Date:   Mon Sep 29 11:24:05 2025 +0200
+
+    MBS-1921: payout modifier + settlement
+
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/CasinoContext.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/CasinoContext.java
+index a67ac81..64046d3 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/CasinoContext.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/CasinoContext.java
+@@ -3,10 +3,14 @@ package com.sportradar.mbs.sdk.entities.common;
+ import com.fasterxml.jackson.annotation.JsonProperty;
+ import com.sportradar.mbs.sdk.entities.channel.Channel;
+ 
++import java.util.List;
++
+ public class CasinoContext {
+ 
+     @JsonProperty("walletId")
+     private String walletId;
++    @JsonProperty("rates")
++    private ExchangeRate[] rates;
+     @JsonProperty("channel")
+     private Channel channel;
+     @JsonProperty("endCustomer")
+@@ -24,6 +28,14 @@ public class CasinoContext {
+         this.walletId = value;
+     }
+ 
++    public ExchangeRate[] getRates() {
++        return this.rates;
++    }
++
++    public void setRates(ExchangeRate[] value) {
++        this.rates = value;
++    }
++
+     public Channel getChannel() {
+         return this.channel;
+     }
+@@ -56,6 +68,16 @@ public class CasinoContext {
+             return this;
+         }
+ 
++        public Builder setRates(ExchangeRate... value) {
++            this.instance.setRates(value);
++            return this;
++        }
++
++        public Builder setRates(List<? extends ExchangeRate> value) {
++            ExchangeRate[] arr = value == null ? null : value.toArray(new ExchangeRate[0]);
++            return this.setRates(arr);
++        }
++
+         public Builder setChannel(Channel value) {
+             this.instance.setChannel(value);
+             return this;
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/TicketContext.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/TicketContext.java
+index b773465..5552849 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/TicketContext.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/common/TicketContext.java
+@@ -13,6 +13,8 @@ public class TicketContext {
+     private String walletId;
+     @JsonProperty("ref")
+     private TicketRef ref;
++    @JsonProperty("rates")
++    private ExchangeRate[] rates;
+     @JsonProperty("channel")
+     private Channel channel;
+     @JsonProperty("limitId")
+@@ -42,6 +44,14 @@ public class TicketContext {
+         this.ref = value;
+     }
+ 
++    public ExchangeRate[] getRates() {
++        return this.rates;
++    }
++
++    public void setRates(ExchangeRate[] value) {
++        this.rates = value;
++    }
++
+     public Channel getChannel() {
+         return this.channel;
+     }
+@@ -95,6 +105,16 @@ public class TicketContext {
+             return this;
+         }
+ 
++        public Builder setRates(ExchangeRate... value) {
++            this.instance.setRates(value);
++            return this;
++        }
++
++        public Builder setRates(List<? extends ExchangeRate> value) {
++            ExchangeRate[] arr = value == null ? null : value.toArray(new ExchangeRate[0]);
++            return this.setRates(arr);
++        }
++
+         public Builder setChannel(Channel value) {
+             this.instance.setChannel(value);
+             return this;
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/OddsPayoutModifierSettlement.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/OddsPayoutModifierSettlement.java
+new file mode 100644
+index 0000000..45aaa36
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/OddsPayoutModifierSettlement.java
+@@ -0,0 +1,40 @@
++package com.sportradar.mbs.sdk.entities.payoutmodifiersettlement;
++
++import com.fasterxml.jackson.annotation.JsonProperty;
++import com.sportradar.mbs.sdk.entities.odds.Odds;
++
++public class OddsPayoutModifierSettlement extends PayoutModifierSettlement {
++
++    @JsonProperty("odds")
++    private Odds odds;
++
++    public Odds getOdds() {
++        return this.odds;
++    }
++
++    public void setOdds(Odds value) {
++        this.odds = value;
++    }
++
++
++    public static Builder newBuilder() {
++        return new Builder();
++    }
++
++    public static class Builder {
++
++        private final OddsPayoutModifierSettlement instance = new OddsPayoutModifierSettlement();
++
++        private Builder() {
++        }
++
++        public OddsPayoutModifierSettlement build() {
++            return this.instance;
++        }
++
++        public Builder setOdds(Odds value) {
++            this.instance.setOdds(value);
++            return this;
++        }
++    }
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/PayoutModifierSettlement.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/PayoutModifierSettlement.java
+new file mode 100644
+index 0000000..6c4e766
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/PayoutModifierSettlement.java
+@@ -0,0 +1,25 @@
++package com.sportradar.mbs.sdk.entities.payoutmodifiersettlement;
++
++import com.fasterxml.jackson.annotation.JsonSubTypes;
++import com.fasterxml.jackson.annotation.JsonTypeInfo;
++
++@JsonTypeInfo(
++        use = JsonTypeInfo.Id.NAME,
++        include = JsonTypeInfo.As.PROPERTY,
++        property = "type")
++@JsonSubTypes({
++        @JsonSubTypes.Type(value = OddsPayoutModifierSettlement.class, name = "odds"),
++        @JsonSubTypes.Type(value = ResultPayoutModifierSettlement.class, name = "result")
++})
++public abstract class PayoutModifierSettlement {
++
++
++    public static OddsPayoutModifierSettlement.Builder newOddsPayoutModifierSettlementBuilder() {
++        return OddsPayoutModifierSettlement.newBuilder();
++    }
++
++    public static ResultPayoutModifierSettlement.Builder newResultPayoutModifierSettlementBuilder() {
++        return ResultPayoutModifierSettlement.newBuilder();
++    }
++
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/ResultPayoutModifierSettlement.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/ResultPayoutModifierSettlement.java
+new file mode 100644
+index 0000000..97ab198
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/payoutmodifiersettlement/ResultPayoutModifierSettlement.java
+@@ -0,0 +1,40 @@
++package com.sportradar.mbs.sdk.entities.payoutmodifiersettlement;
++
++import com.fasterxml.jackson.annotation.JsonProperty;
++import com.sportradar.mbs.sdk.entities.resulting.SelectionResult;
++
++public class ResultPayoutModifierSettlement extends PayoutModifierSettlement {
++
++    @JsonProperty("result")
++    private SelectionResult result;
++
++    public SelectionResult getResult() {
++        return this.result;
++    }
++
++    public void setResult(SelectionResult value) {
++        this.result = value;
++    }
++
++
++    public static Builder newBuilder() {
++        return new Builder();
++    }
++
++    public static class Builder {
++
++        private final ResultPayoutModifierSettlement instance = new ResultPayoutModifierSettlement();
++
++        private Builder() {
++        }
++
++        public ResultPayoutModifierSettlement build() {
++            return this.instance;
++        }
++
++        public Builder setResult(SelectionResult value) {
++            this.instance.setResult(value);
++            return this;
++        }
++    }
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/ContentRequest.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/ContentRequest.java
+index 5973b2c..b401294 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/ContentRequest.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/ContentRequest.java
+@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+         @JsonSubTypes.Type(value = ExtSettlementRequest.class, name = "ext-settlement"),
+         @JsonSubTypes.Type(value = ExtSettlementAckRequest.class, name = "ext-settlement-ack"),
+         @JsonSubTypes.Type(value = MaxStakeRequest.class, name = "max-stake"),
++        @JsonSubTypes.Type(value = PayoutModifierSettlementRequest.class, name = "payout-modifier-settlement"),
+         @JsonSubTypes.Type(value = TicketRequest.class, name = "ticket"),
+         @JsonSubTypes.Type(value = TicketAckRequest.class, name = "ticket-ack"),
+         @JsonSubTypes.Type(value = TicketBuildRequest.class, name = "ticket-build"),
+@@ -33,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+ })
+ public abstract class ContentRequest {
+ 
++
+     public static AccountInterventionInformRequest.Builder newAccountInterventionInformRequestBuilder() {
+         return AccountInterventionInformRequest.newBuilder();
+     }
+@@ -101,6 +103,10 @@ public abstract class ContentRequest {
+         return MaxStakeRequest.newBuilder();
+     }
+ 
++    public static PayoutModifierSettlementRequest.Builder newPayoutModifierSettlementRequestBuilder() {
++        return PayoutModifierSettlementRequest.newBuilder();
++    }
++
+     public static TicketRequest.Builder newTicketRequestBuilder() {
+         return TicketRequest.newBuilder();
+     }
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/PayoutModifierSettlementRequest.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/PayoutModifierSettlementRequest.java
+new file mode 100644
+index 0000000..25c3f63
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/request/PayoutModifierSettlementRequest.java
+@@ -0,0 +1,70 @@
++package com.sportradar.mbs.sdk.entities.request;
++
++import com.fasterxml.jackson.annotation.JsonProperty;
++import com.sportradar.mbs.sdk.entities.payoutmodifiersettlement.PayoutModifierSettlement;
++
++public class PayoutModifierSettlementRequest extends ContentRequest {
++
++    @JsonProperty("reference")
++    private String reference;
++    @JsonProperty("settlementId")
++    private String settlementId;
++    @JsonProperty("settlement")
++    private PayoutModifierSettlement settlement;
++
++    public String getReference() {
++        return this.reference;
++    }
++
++    public void setReference(String value) {
++        this.reference = value;
++    }
++
++    public String getSettlementId() {
++        return this.settlementId;
++    }
++
++    public void setSettlementId(String value) {
++        this.settlementId = value;
++    }
++
++    public PayoutModifierSettlement getSettlement() {
++        return this.settlement;
++    }
++
++    public void setSettlement(PayoutModifierSettlement value) {
++        this.settlement = value;
++    }
++
++
++    public static Builder newBuilder() {
++        return new Builder();
++    }
++
++    public static class Builder {
++
++        private final PayoutModifierSettlementRequest instance = new PayoutModifierSettlementRequest();
++
++        private Builder() {
++        }
++
++        public PayoutModifierSettlementRequest build() {
++            return this.instance;
++        }
++
++        public Builder setReference(String value) {
++            this.instance.setReference(value);
++            return this;
++        }
++
++        public Builder setSettlementId(String value) {
++            this.instance.setSettlementId(value);
++            return this;
++        }
++
++        public Builder setSettlement(PayoutModifierSettlement value) {
++            this.instance.setSettlement(value);
++            return this;
++        }
++    }
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/ContentResponse.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/ContentResponse.java
+index 50d42ab..837d8a1 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/ContentResponse.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/ContentResponse.java
+@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+         @JsonSubTypes.Type(value = ExtSettlementAckResponse.class, name = "ext-settlement-ack-reply"),
+         @JsonSubTypes.Type(value = ExtSettlementResponse.class, name = "ext-settlement-reply"),
+         @JsonSubTypes.Type(value = MaxStakeResponse.class, name = "max-stake-reply"),
++        @JsonSubTypes.Type(value = PayoutModifierSettlementResponse.class, name = "payout-modifier-settlement-reply"),
+         @JsonSubTypes.Type(value = TicketAckResponse.class, name = "ticket-ack-reply"),
+         @JsonSubTypes.Type(value = TicketBuildResponse.class, name = "ticket-build-reply"),
+         @JsonSubTypes.Type(value = TicketInformResponse.class, name = "ticket-inform-reply"),
+@@ -34,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+ })
+ public abstract class ContentResponse {
+ 
++
+     public static AccountInterventionInformResponse.Builder newAccountInterventionInformResponseBuilder() {
+         return AccountInterventionInformResponse.newBuilder();
+     }
+@@ -106,6 +108,10 @@ public abstract class ContentResponse {
+         return MaxStakeResponse.newBuilder();
+     }
+ 
++    public static PayoutModifierSettlementResponse.Builder newPayoutModifierSettlementResponseBuilder() {
++        return PayoutModifierSettlementResponse.newBuilder();
++    }
++
+     public static TicketAckResponse.Builder newTicketAckResponseBuilder() {
+         return TicketAckResponse.newBuilder();
+     }
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/PayoutModifierSettlementResponse.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/PayoutModifierSettlementResponse.java
+new file mode 100644
+index 0000000..db26d14
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/response/PayoutModifierSettlementResponse.java
+@@ -0,0 +1,115 @@
++package com.sportradar.mbs.sdk.entities.response;
++
++import com.fasterxml.jackson.annotation.JsonProperty;
++import com.sportradar.mbs.sdk.entities.common.AcceptanceStatus;
++
++public class PayoutModifierSettlementResponse extends ContentResponse {
++
++    @JsonProperty("reference")
++    private String reference;
++    @JsonProperty("code")
++    private int code;
++    @JsonProperty("signature")
++    private String signature;
++    @JsonProperty("settlementId")
++    private String settlementId;
++    @JsonProperty("message")
++    private String message;
++    @JsonProperty("status")
++    private AcceptanceStatus status;
++
++    public String getReference() {
++        return this.reference;
++    }
++
++    public void setReference(String value) {
++        this.reference = value;
++    }
++
++    public int getCode() {
++        return this.code;
++    }
++
++    public void setCode(int value) {
++        this.code = value;
++    }
++
++    public String getSignature() {
++        return this.signature;
++    }
++
++    public void setSignature(String value) {
++        this.signature = value;
++    }
++
++    public String getSettlementId() {
++        return this.settlementId;
++    }
++
++    public void setSettlementId(String value) {
++        this.settlementId = value;
++    }
++
++    public String getMessage() {
++        return this.message;
++    }
++
++    public void setMessage(String value) {
++        this.message = value;
++    }
++
++    public AcceptanceStatus getStatus() {
++        return this.status;
++    }
++
++    public void setStatus(AcceptanceStatus value) {
++        this.status = value;
++    }
++
++
++    public static Builder newBuilder() {
++        return new Builder();
++    }
++
++    public static class Builder {
++
++        private final PayoutModifierSettlementResponse instance = new PayoutModifierSettlementResponse();
++
++        private Builder() {
++        }
++
++        public PayoutModifierSettlementResponse build() {
++            return this.instance;
++        }
++
++        public Builder setReference(String value) {
++            this.instance.setReference(value);
++            return this;
++        }
++
++        public Builder setCode(int value) {
++            this.instance.setCode(value);
++            return this;
++        }
++
++        public Builder setSignature(String value) {
++            this.instance.setSignature(value);
++            return this;
++        }
++
++        public Builder setSettlementId(String value) {
++            this.instance.setSettlementId(value);
++            return this;
++        }
++
++        public Builder setMessage(String value) {
++            this.instance.setMessage(value);
++            return this;
++        }
++
++        public Builder setStatus(AcceptanceStatus value) {
++            this.instance.setStatus(value);
++            return this;
++        }
++    }
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/PayoutModifierSelection.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/PayoutModifierSelection.java
+new file mode 100644
+index 0000000..ca9548d
+--- /dev/null
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/PayoutModifierSelection.java
+@@ -0,0 +1,69 @@
++package com.sportradar.mbs.sdk.entities.selection;
++
++import com.fasterxml.jackson.annotation.JsonProperty;
++
++public class PayoutModifierSelection extends Selection {
++
++    @JsonProperty("reference")
++    private String reference;
++    @JsonProperty("selection")
++    private Selection selection;
++    @JsonProperty("description")
++    private String description;
++
++    public String getReference() {
++        return this.reference;
++    }
++
++    public void setReference(String value) {
++        this.reference = value;
++    }
++
++    public Selection getSelection() {
++        return this.selection;
++    }
++
++    public void setSelection(Selection value) {
++        this.selection = value;
++    }
++
++    public String getDescription() {
++        return this.description;
++    }
++
++    public void setDescription(String value) {
++        this.description = value;
++    }
++
++
++    public static Builder newBuilder() {
++        return new Builder();
++    }
++
++    public static class Builder {
++
++        private final PayoutModifierSelection instance = new PayoutModifierSelection();
++
++        private Builder() {
++        }
++
++        public PayoutModifierSelection build() {
++            return this.instance;
++        }
++
++        public Builder setReference(String value) {
++            this.instance.setReference(value);
++            return this;
++        }
++
++        public Builder setSelection(Selection value) {
++            this.instance.setSelection(value);
++            return this;
++        }
++
++        public Builder setDescription(String value) {
++            this.instance.setDescription(value);
++            return this;
++        }
++    }
++}
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/Selection.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/Selection.java
+index 9e6472a..a244851 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/Selection.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/entities/selection/Selection.java
+@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+         @JsonSubTypes.Type(value = AccumulatorSelection.class, name = "accumulator"),
+         @JsonSubTypes.Type(value = ExtSelection.class, name = "external"),
+         @JsonSubTypes.Type(value = OddsBoostSelection.class, name = "odds-boost"),
++        @JsonSubTypes.Type(value = PayoutModifierSelection.class, name = "payout-modifier"),
+         @JsonSubTypes.Type(value = SystemSelection.class, name = "system"),
+         @JsonSubTypes.Type(value = UfSelection.class, name = "uf"),
+         @JsonSubTypes.Type(value = UfCustomBetSelection.class, name = "uf-custom-bet"),
+@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
+ })
+ public abstract class Selection {
+ 
++
+     public static AccumulatorSelection.Builder newAccumulatorSelectionBuilder() {
+         return AccumulatorSelection.newBuilder();
+     }
+@@ -30,6 +32,10 @@ public abstract class Selection {
+         return OddsBoostSelection.newBuilder();
+     }
+ 
++    public static PayoutModifierSelection.Builder newPayoutModifierSelectionBuilder() {
++        return PayoutModifierSelection.newBuilder();
++    }
++
+     public static SystemSelection.Builder newSystemSelectionBuilder() {
+         return SystemSelection.newBuilder();
+     }
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/internal/protocol/TicketProtocolImpl.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/internal/protocol/TicketProtocolImpl.java
+index 9f6e6aa..4a69d94 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/internal/protocol/TicketProtocolImpl.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/internal/protocol/TicketProtocolImpl.java
+@@ -5,6 +5,7 @@ import com.sportradar.mbs.sdk.entities.response.*;
+ import com.sportradar.mbs.sdk.protocol.TicketProtocol;
+ 
+ import java.util.concurrent.CompletableFuture;
++import java.util.concurrent.ExecutionException;
+ 
+ class TicketProtocolImpl implements TicketProtocol {
+ 
+@@ -78,4 +79,9 @@ class TicketProtocolImpl implements TicketProtocol {
+     public CompletableFuture<CashoutPlacementResponse> sendCashoutPlacementAsync(CashoutPlacementRequest request) {
+         return engine.execute("cashout-stake", request, CashoutPlacementResponse.class);
+     }
++
++    @Override
++    public CompletableFuture<PayoutModifierSettlementResponse> sendPayoutModifierSettlementAsync(PayoutModifierSettlementRequest request) {
++        return engine.execute("payout-modifier-settlement", request, PayoutModifierSettlementResponse.class);
++    }
+ }
+diff --git a/src/sdk/src/main/java/com/sportradar/mbs/sdk/protocol/TicketProtocol.java b/src/sdk/src/main/java/com/sportradar/mbs/sdk/protocol/TicketProtocol.java
+index 4c57eb5..90c1dcf 100644
+--- a/src/sdk/src/main/java/com/sportradar/mbs/sdk/protocol/TicketProtocol.java
++++ b/src/sdk/src/main/java/com/sportradar/mbs/sdk/protocol/TicketProtocol.java
+@@ -284,4 +284,12 @@ public interface TicketProtocol {
+      * @return a CompletableFuture representing the cashout placement response
+      */
+     CompletableFuture<CashoutPlacementResponse> sendCashoutPlacementAsync(CashoutPlacementRequest request) throws ExecutionException, InterruptedException;
++
++    /**
++     * Sends a payout modifier settlement request asynchronously and returns a CompletableFuture representing the response.
++     *
++     * @param request the payout modifier settlement request to be sent
++     * @return a CompletableFuture representing the payout modifier settlement response
++     */
++    CompletableFuture<PayoutModifierSettlementResponse>  sendPayoutModifierSettlementAsync(PayoutModifierSettlementRequest request) throws ExecutionException, InterruptedException;
+ }

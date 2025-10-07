@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ExtSettlementRequest.class, name = "ext-settlement"),
         @JsonSubTypes.Type(value = ExtSettlementAckRequest.class, name = "ext-settlement-ack"),
         @JsonSubTypes.Type(value = MaxStakeRequest.class, name = "max-stake"),
+        @JsonSubTypes.Type(value = PayoutModifierSettlementRequest.class, name = "payout-modifier-settlement"),
         @JsonSubTypes.Type(value = TicketRequest.class, name = "ticket"),
         @JsonSubTypes.Type(value = TicketAckRequest.class, name = "ticket-ack"),
         @JsonSubTypes.Type(value = TicketBuildRequest.class, name = "ticket-build"),
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = WithdrawalInformRequest.class, name = "withdrawal-inform")
 })
 public abstract class ContentRequest {
+
 
     public static AccountInterventionInformRequest.Builder newAccountInterventionInformRequestBuilder() {
         return AccountInterventionInformRequest.newBuilder();
@@ -99,6 +101,10 @@ public abstract class ContentRequest {
 
     public static MaxStakeRequest.Builder newMaxStakeRequestBuilder() {
         return MaxStakeRequest.newBuilder();
+    }
+
+    public static PayoutModifierSettlementRequest.Builder newPayoutModifierSettlementRequestBuilder() {
+        return PayoutModifierSettlementRequest.newBuilder();
     }
 
     public static TicketRequest.Builder newTicketRequestBuilder() {

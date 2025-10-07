@@ -284,4 +284,12 @@ public interface TicketProtocol {
      * @return a CompletableFuture representing the cashout placement response
      */
     CompletableFuture<CashoutPlacementResponse> sendCashoutPlacementAsync(CashoutPlacementRequest request) throws ExecutionException, InterruptedException;
+
+    /**
+     * Sends a payout modifier settlement request asynchronously and returns a CompletableFuture representing the response.
+     *
+     * @param request the payout modifier settlement request to be sent
+     * @return a CompletableFuture representing the payout modifier settlement response
+     */
+    CompletableFuture<PayoutModifierSettlementResponse>  sendPayoutModifierSettlementAsync(PayoutModifierSettlementRequest request) throws ExecutionException, InterruptedException;
 }

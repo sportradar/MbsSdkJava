@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ExtSettlementAckResponse.class, name = "ext-settlement-ack-reply"),
         @JsonSubTypes.Type(value = ExtSettlementResponse.class, name = "ext-settlement-reply"),
         @JsonSubTypes.Type(value = MaxStakeResponse.class, name = "max-stake-reply"),
+        @JsonSubTypes.Type(value = PayoutModifierSettlementResponse.class, name = "payout-modifier-settlement-reply"),
         @JsonSubTypes.Type(value = TicketAckResponse.class, name = "ticket-ack-reply"),
         @JsonSubTypes.Type(value = TicketBuildResponse.class, name = "ticket-build-reply"),
         @JsonSubTypes.Type(value = TicketInformResponse.class, name = "ticket-inform-reply"),
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = WithdrawalInformResponse.class, name = "withdrawal-inform-reply")
 })
 public abstract class ContentResponse {
+
 
     public static AccountInterventionInformResponse.Builder newAccountInterventionInformResponseBuilder() {
         return AccountInterventionInformResponse.newBuilder();
@@ -104,6 +106,10 @@ public abstract class ContentResponse {
 
     public static MaxStakeResponse.Builder newMaxStakeResponseBuilder() {
         return MaxStakeResponse.newBuilder();
+    }
+
+    public static PayoutModifierSettlementResponse.Builder newPayoutModifierSettlementResponseBuilder() {
+        return PayoutModifierSettlementResponse.newBuilder();
     }
 
     public static TicketAckResponse.Builder newTicketAckResponseBuilder() {
