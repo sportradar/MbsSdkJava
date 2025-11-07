@@ -15,6 +15,6 @@ public class GamingProtocolImpl implements GamingProtocol {
 
     @Override
     public CompletableFuture<CasinoSessionsResponse> sendCasinoSessionAsync(CasinoSessionsRequest request) {
-        return engine.execute("casino-session", request, CasinoSessionsResponse.class);
+        return engine.execute("casino-sessions-inform", request, CasinoSessionsResponse.class);
     }
 }
