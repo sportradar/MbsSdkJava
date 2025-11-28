@@ -13,11 +13,15 @@ import com.sportradar.mbs.sdk.protocol.AccountProtocol;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of the {@link AccountProtocol} interface.
- * Handles communication with the protocol engine to process various account-related requests asynchronously.
+ * Implementation of the {@link AccountProtocol} interface. Handles communication with the protocol engine to process
+ * various account-related requests asynchronously.
  */
 public class AccountProtocolImpl implements AccountProtocol {
 
+    /**
+     * The operator identifier.
+     */
+    private final long operatorId;
     /**
      * The protocol engine responsible for executing requests.
      */
@@ -28,7 +32,8 @@ public class AccountProtocolImpl implements AccountProtocol {
      *
      * @param engine The protocol engine used for executing requests.
      */
-    public AccountProtocolImpl(final ProtocolEngine engine) {
+    public AccountProtocolImpl(final long operatorId, final ProtocolEngine engine) {
+        this.operatorId = operatorId;
         this.engine = engine;
     }
 
@@ -41,7 +46,7 @@ public class AccountProtocolImpl implements AccountProtocol {
     @Override
     public CompletableFuture<AccountStatusInformResponse> sendStatusInformAsync(
             AccountStatusInformRequest request) {
-        return engine.execute("account-status-inform", request, AccountStatusInformResponse.class);
+        return engine.execute(this.operatorId, "account-status-inform", request, AccountStatusInformResponse.class);
     }
 
     /**
@@ -53,7 +58,7 @@ public class AccountProtocolImpl implements AccountProtocol {
     @Override
     public CompletableFuture<AccountLimitInformResponse> sendLimitInformAsync(
             AccountLimitInformRequest request) {
-        return engine.execute("account-limit-inform", request, AccountLimitInformResponse.class);
+        return engine.execute(this.operatorId, "account-limit-inform", request, AccountLimitInformResponse.class);
     }
 
     /**
@@ -65,7 +70,7 @@ public class AccountProtocolImpl implements AccountProtocol {
     @Override
     public CompletableFuture<AccountLimitReachedInformResponse> sendLimitReachedInformAsync(
             AccountLimitReachedInformRequest request) {
-        return engine.execute("account-limit-reached-inform", request, AccountLimitReachedInformResponse.class);
+        return engine.execute(this.operatorId, "account-limit-reached-inform", request, AccountLimitReachedInformResponse.class);
     }
 
     /**
@@ -77,6 +82,6 @@ public class AccountProtocolImpl implements AccountProtocol {
     @Override
     public CompletableFuture<AccountInterventionInformResponse> sendInterventionInformAsync(
             AccountInterventionInformRequest request) {
-        return engine.execute("account-intervention-inform", request, AccountInterventionInformResponse.class);
+        return engine.execute(this.operatorId, "account-intervention-inform", request, AccountInterventionInformResponse.class);
     }
 }

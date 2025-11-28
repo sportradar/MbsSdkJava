@@ -10,10 +10,7 @@ import com.sportradar.mbs.sdk.exceptions.*;
 import com.sportradar.mbs.sdk.internal.config.ImmutableConfig;
 import com.sportradar.mbs.sdk.internal.config.ProtocolHandlerConfig;
 import com.sportradar.mbs.sdk.internal.connection.ConnectionProvider;
-import com.sportradar.mbs.sdk.internal.connection.msg.ExcWsOutputMessage;
-import com.sportradar.mbs.sdk.internal.connection.msg.NotProcessedWsOutputMessage;
-import com.sportradar.mbs.sdk.internal.connection.msg.ReceivedContentWsOutputMessage;
-import com.sportradar.mbs.sdk.internal.connection.msg.SendWsInputMessage;
+import com.sportradar.mbs.sdk.internal.connection.msg.*;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsInputMessage;
 import com.sportradar.mbs.sdk.internal.connection.msg.base.WsOutputMessage;
 import com.sportradar.mbs.sdk.internal.utils.ExcSuppress;
@@ -87,7 +84,7 @@ public class ProtocolEngine implements AutoCloseable {
     }
 
     public <T extends ContentRequest, R extends ContentResponse> CompletableFuture<R> execute(
-            final String operation, final T content, final Class<R> responseClass) {
+            final long operatorId, final String operation, final T content, final Class<R> responseClass) {
         String correlationId = null;
         try {
             checkConnected();
@@ -100,7 +97,7 @@ public class ProtocolEngine implements AutoCloseable {
             request.setOperation(operation);
             request.setCorrelationId(correlationId);
             request.setVersion("3.0");
-            request.setOperatorId(this.config.getOperatorId());
+            request.setOperatorId(operatorId);
             request.setTimestampUtc(nowUtcMillis());
 
             final List<ByteBuffer> frames = createFrames(request);
@@ -237,8 +234,8 @@ public class ProtocolEngine implements AutoCloseable {
 
     private void handleNotProcessedWsOutputMessage(final NotProcessedWsOutputMessage msg) {
         try {
-            final ProtocolInvalidResponseException invalidRequestException =
-                    new ProtocolInvalidResponseException("Invalid request");
+            final ProtocolInvalidRequestException invalidRequestException =
+                    new ProtocolInvalidRequestException("Invalid request");
             if (responseReceived(msg.getCorrelationId(), invalidRequestException)) return;
 
             handleException(invalidRequestException);

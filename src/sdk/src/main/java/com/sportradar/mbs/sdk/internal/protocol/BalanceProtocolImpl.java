@@ -15,6 +15,10 @@ import java.util.concurrent.CompletableFuture;
 public class BalanceProtocolImpl implements BalanceProtocol {
 
     /**
+     * The operator identifier.
+     */
+    private final long operatorId;
+    /**
      * The protocol engine responsible for executing requests.
      */
     private final ProtocolEngine engine;
@@ -24,7 +28,8 @@ public class BalanceProtocolImpl implements BalanceProtocol {
      *
      * @param engine The protocol engine used for executing requests.
      */
-    public BalanceProtocolImpl(final ProtocolEngine engine) {
+    public BalanceProtocolImpl(final long operatorId, final ProtocolEngine engine) {
+        this.operatorId = operatorId;
         this.engine = engine;
     }
 
@@ -36,7 +41,7 @@ public class BalanceProtocolImpl implements BalanceProtocol {
      */
     @Override
     public CompletableFuture<DepositInformResponse> sendDepositInformAsync(DepositInformRequest request) {
-        return engine.execute("balance-deposit-inform", request, DepositInformResponse.class);
+        return engine.execute(this.operatorId, "balance-deposit-inform", request, DepositInformResponse.class);
     }
 
     /**
@@ -47,6 +52,6 @@ public class BalanceProtocolImpl implements BalanceProtocol {
      */
     @Override
     public CompletableFuture<WithdrawalInformResponse> sendWithdrawalInformAsync(WithdrawalInformRequest request) {
-        return engine.execute("balance-withdrawal-inform", request, WithdrawalInformResponse.class);
+        return engine.execute(this.operatorId, "balance-withdrawal-inform", request, WithdrawalInformResponse.class);
     }
 }
