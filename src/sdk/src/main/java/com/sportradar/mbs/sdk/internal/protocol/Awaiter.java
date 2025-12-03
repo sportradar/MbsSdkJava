@@ -49,7 +49,10 @@ public class Awaiter<R extends ContentResponse> {
     }
 
     public void completeWithException(final SdkException sdkException) {
-        this.sendWsInputMessage.suppressSend();
+        final SendWsInputMessage inputMsg = this.sendWsInputMessage;
+        if (inputMsg != null) {
+            inputMsg.suppressSend();
+        }
         this.future.completeExceptionally(sdkException);
     }
 
