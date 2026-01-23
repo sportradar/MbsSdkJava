@@ -18,7 +18,8 @@ public enum PayoutSourceType {
     FREE_CASH("free-cash"),
     MANUAL_CASHOUT("manual-cancel"),
     MANUAL_CANCEL("manual-cashout"),
-    BONUS("bonus");
+    BONUS("bonus"),
+    PAYOUT_MODIFIER("payout-modifier");
 
     private static final Map<String, PayoutSourceType> VALUES = new HashMap();
 

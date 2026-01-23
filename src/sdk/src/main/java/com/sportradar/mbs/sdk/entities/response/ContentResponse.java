@@ -12,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = AccountLimitInformResponse.class, name = "account-limit-inform-reply"),
         @JsonSubTypes.Type(value = AccountLimitReachedInformResponse.class, name = "account-limit-reached-inform-reply"),
         @JsonSubTypes.Type(value = AccountStatusInformResponse.class, name = "account-status-inform-reply"),
+        @JsonSubTypes.Type(value = AutoCashoutCancelResponse.class, name = "auto-cashout-cancel-reply"),
+        @JsonSubTypes.Type(value = AutoCashoutResponse.class, name = "auto-cashout-reply"),
         @JsonSubTypes.Type(value = BalanceChangeInformResponse.class, name = "balance-change-inform-reply"),
+        @JsonSubTypes.Type(value = CampaignOptinResponse.class, name = "campaign-optin-reply"),
         @JsonSubTypes.Type(value = CancelAckResponse.class, name = "cancel-ack-reply"),
         @JsonSubTypes.Type(value = CancelResponse.class, name = "cancel-reply"),
         @JsonSubTypes.Type(value = CashoutAckResponse.class, name = "cashout-ack-reply"),
@@ -52,8 +55,20 @@ public abstract class ContentResponse {
         return AccountStatusInformResponse.newBuilder();
     }
 
+    public static AutoCashoutCancelResponse.Builder newAutoCashoutCancelResponseBuilder() {
+        return AutoCashoutCancelResponse.newBuilder();
+    }
+
+    public static AutoCashoutResponse.Builder newAutoCashoutResponseBuilder() {
+        return AutoCashoutResponse.newBuilder();
+    }
+
     public static BalanceChangeInformResponse.Builder newBalanceChangeInformResponseBuilder() {
         return BalanceChangeInformResponse.newBuilder();
+    }
+
+    public static CampaignOptinResponse.Builder newCampaignOptinResponseBuilder() {
+        return CampaignOptinResponse.newBuilder();
     }
 
     public static CancelAckResponse.Builder newCancelAckResponseBuilder() {

@@ -8,7 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PaymentMethod {
-    CREDIT_CARD("credit-card");
+    CREDIT_CARD("credit-card"),
+    E_WALLET("e-wallet"),
+    PREPAID_CARD("prepaid-card"),
+    DEBIT_CART("debit-card"),
+    BANK_TRANSFER("bank-transfer");
 
     private static final Map<String, PaymentMethod> VALUES = new HashMap();
 
