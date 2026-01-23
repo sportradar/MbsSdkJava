@@ -12,7 +12,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = AccountLimitInformRequest.class, name = "account-limit-inform"),
         @JsonSubTypes.Type(value = AccountLimitReachedInformRequest.class, name = "account-limit-reached-inform"),
         @JsonSubTypes.Type(value = AccountStatusInformRequest.class, name = "account-status-inform"),
+        @JsonSubTypes.Type(value = AutoCashoutRequest.class, name = "auto-cashout"),
+        @JsonSubTypes.Type(value = AutoCashoutCancelRequest.class, name = "auto-cashout-cancel"),
         @JsonSubTypes.Type(value = BalanceChangeInformRequest.class, name = "balance-change-inform"),
+        @JsonSubTypes.Type(value = CampaignOptinRequest.class, name = "campaign-optin"),
         @JsonSubTypes.Type(value = CancelRequest.class, name = "cancel"),
         @JsonSubTypes.Type(value = CancelAckRequest.class, name = "cancel-ack"),
         @JsonSubTypes.Type(value = CashoutRequest.class, name = "cashout"),
@@ -51,8 +54,20 @@ public abstract class ContentRequest {
         return AccountStatusInformRequest.newBuilder();
     }
 
+    public static AutoCashoutRequest.Builder newAutoCashoutRequestBuilder() {
+        return AutoCashoutRequest.newBuilder();
+    }
+
+    public static AutoCashoutCancelRequest.Builder newAutoCashoutCancelRequestBuilder() {
+        return AutoCashoutCancelRequest.newBuilder();
+    }
+
     public static BalanceChangeInformRequest.Builder newBalanceChangeInformRequestBuilder() {
         return BalanceChangeInformRequest.newBuilder();
+    }
+
+    public static CampaignOptinRequest.Builder newCampaignOptinRequestBuilder() {
+        return CampaignOptinRequest.newBuilder();
     }
 
     public static CancelRequest.Builder newCancelRequestBuilder() {

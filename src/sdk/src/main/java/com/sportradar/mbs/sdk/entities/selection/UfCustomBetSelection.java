@@ -11,6 +11,10 @@ public class UfCustomBetSelection extends Selection {
     private UfSelection[] selections;
     @JsonProperty("odds")
     private Odds odds;
+    @JsonProperty("harmOddsApplied")
+    private Boolean harmOddsApplied;
+    @JsonProperty("useHarmOdds")
+    private boolean useHarmOdds;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -30,6 +34,22 @@ public class UfCustomBetSelection extends Selection {
 
     public void setOdds(Odds value) {
         this.odds = value;
+    }
+
+    public Boolean getHarmOddsApplied() {
+        return this.harmOddsApplied;
+    }
+
+    public void setHarmOddsApplied(Boolean value) {
+        this.harmOddsApplied = value;
+    }
+
+    public boolean getUseHarmOdds() {
+        return this.useHarmOdds;
+    }
+
+    public void setUseHarmOdds(boolean value) {
+        this.useHarmOdds = value;
     }
 
     public static class Builder {
@@ -55,6 +75,16 @@ public class UfCustomBetSelection extends Selection {
 
         public Builder setOdds(Odds value) {
             this.instance.setOdds(value);
+            return this;
+        }
+
+        public Builder setHarmOddsApplied(Boolean value) {
+            this.instance.setHarmOddsApplied(value);
+            return this;
+        }
+
+        public Builder setUseHarmOdds(boolean value) {
+            this.instance.setUseHarmOdds(value);
             return this;
         }
     }
